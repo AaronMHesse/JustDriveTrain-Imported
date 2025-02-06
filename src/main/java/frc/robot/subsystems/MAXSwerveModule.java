@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.AlternateEncoderConfig.Type;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -56,6 +57,13 @@ public class MAXSwerveModule {
         PersistMode.kPersistParameters);
     m_turningSpark.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+
+    //     m_drivingEncoder = m_drivingSpark.getEncoder();
+    // m_turningEncoder = m_turningSpark.getAbsoluteEncoder(Type.kDutyCycle);
+    // m_drivingClosedLoopController = m_drivingSpark.getClosedLoopController();
+    // m_turningClosedLoopController = m_turningSpark.getClosedLoopController();
+    // m_drivingClosedLoopController.setFeedbackDevice(m_drivingEncoder);
+    // m_turningClosedLoopController.setFeedbackDevice(m_turningEncoder);
 
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());

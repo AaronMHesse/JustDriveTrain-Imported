@@ -79,7 +79,33 @@ public final class Constants {
     public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
+
+    public static final double kDrivingEncoderPositionFactor = (kWheelDiameterMeters * Math.PI)
+        / kDrivingMotorReduction; // meters
+    public static final double kDrivingEncoderVelocityFactor = ((kWheelDiameterMeters * Math.PI)
+        / kDrivingMotorReduction) / 60.0; // meters per second
+
+    public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
+    public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
+
   }
+
+  // public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
+  // public static final double kTurningEncoderPositionPIDMaxInput = ModuleConstants.kTurningEncoderPositionFactor; // radians
+
+  //   public static final double kDrivingP = 0.05;
+  //   public static final double kDrivingI = 0;
+  //   public static final double kDrivingD = 0;
+  //   public static final double kDrivingFF = 1 / ModuleConstants.kDriveWheelFreeSpeedRps;
+  //   public static final double kDrivingMinOutput = -1;
+  //   public static final double kDrivingMaxOutput = 1;
+
+  //   public static final double kTurningP = 1;
+  //   public static final double kTurningI = 0;
+  //   public static final double kTurningD = 0;
+  //   public static final double kTurningFF = 0;
+  //   public static final double kTurningMinOutput = -1;
+  //   public static final double kTurningMaxOutput = 1; 
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
