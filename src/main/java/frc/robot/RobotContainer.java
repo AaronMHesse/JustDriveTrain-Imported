@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -24,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
+import com.ctre.phoenix6.configs.GyroTrimConfigs;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -57,6 +60,7 @@ XboxController m_operatorController = new XboxController(2);
                 -MathUtil.applyDeadband((m_driverController.getRightX() * 0.8), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
   }
 
   /**

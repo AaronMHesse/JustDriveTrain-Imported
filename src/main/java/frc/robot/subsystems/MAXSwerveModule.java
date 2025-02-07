@@ -61,18 +61,6 @@ public class MAXSwerveModule {
     m_turningSpark.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-        SparkMaxConfig config = new SparkMaxConfig();
-
-        config
-        .inverted(isInverted)
-        .idleMode(IdleMode.kBrake);
-        config.encoder
-        .positionConversionFactor(1000)
-        .velocityConversionFactor(1000);
-        config.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .pid(1, 0, 0);
-
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
     m_drivingEncoder.setPosition(0);
