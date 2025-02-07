@@ -55,7 +55,7 @@ XboxController m_operatorController = new XboxController(2);
                 -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.60 ), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.60 ), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband((m_driverController.getRightX() * 0.8), OIConstants.kDriveDeadband),
-                false, true),
+                true, true),
             m_robotDrive));
   }
 
