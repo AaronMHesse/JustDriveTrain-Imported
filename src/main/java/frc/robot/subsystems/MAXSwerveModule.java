@@ -10,7 +10,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.AlternateEncoderConfig.Type;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -58,12 +61,17 @@ public class MAXSwerveModule {
     m_turningSpark.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    //     m_drivingEncoder = m_drivingSpark.getEncoder();
-    // m_turningEncoder = m_turningSpark.getAbsoluteEncoder(Type.kDutyCycle);
-    // m_drivingClosedLoopController = m_drivingSpark.getClosedLoopController();
-    // m_turningClosedLoopController = m_turningSpark.getClosedLoopController();
-    // m_drivingClosedLoopController.setFeedbackDevice(m_drivingEncoder);
-    // m_turningClosedLoopController.setFeedbackDevice(m_turningEncoder);
+        SparkMaxConfig config = new SparkMaxConfig();
+
+        config
+        .inverted(isInverted)
+        .idleMode(IdleMode.kBrake);
+        config.encoder
+        .positionConversionFactor(1000)
+        .velocityConversionFactor(1000);
+        config.closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .pid(1, 0, 0);
 
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());

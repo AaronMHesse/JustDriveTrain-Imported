@@ -52,10 +52,10 @@ XboxController m_operatorController = new XboxController(2);
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
+                -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.60 ), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.60 ), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband((m_driverController.getRightX() * 0.8), OIConstants.kDriveDeadband),
+                false, true),
             m_robotDrive));
   }
 
