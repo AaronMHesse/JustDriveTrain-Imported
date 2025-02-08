@@ -23,6 +23,11 @@ public class CoralSubsystem extends SubsystemBase {
 
     }
 
+    public Command c_autoCoralWheelRun(double speed) {
+        
+        return new InstantCommand(() -> m_coralWheels.set(speed), this);
+    }
+
     public void c_coralWheelRun(double speed) {
         m_coralWheels.set(speed);
     }

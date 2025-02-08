@@ -8,9 +8,17 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.config.PIDConstants;
+
 
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -20,6 +28,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import frc.robot.Constants.DriveConstants;
@@ -71,6 +80,38 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+
+
+    //EVENTUALLY WILL BE FIGURED OUT//
+// RobotConfig config;
+// try{
+//   config = RobotConfig.fromGUISettings();
+// } catch (Exception e) {
+
+//   e.printStackTrace();
+// }
+
+// AutoBuilder.configure(
+//   this::getPose,
+//   this::resetOdometry,
+//   this::getRobotRelativeSpeeds,
+//   (speeds, feedforwards) -> driveRobotRelative(speeds),
+//   new PPHolonomicDriveController(
+//     new PIDConstants(5.0, 5.0, 5.0),
+//     new PIDConstants(5.0, 5.0, 5.0)
+//   ),
+//   config,
+//   () -> {
+
+// var alliance = DriverStation.getAlliance();
+// if (alliance.isPresent()) {
+//   return alliance.get() == DriverStation.Alliance.Red;
+// }
+// return false;
+//   },
+//   this
+// );
+
   }
 
   @Override
@@ -112,6 +153,29 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
+  
+
+  // public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+  //   var swerveModuleStates = 
+  //     DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+  //   SwerveDriveKinematics.desaturateWheelSpeeds(
+  //     swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
+  //     m_frontLeft.setDesiredState(0);
+  //     m_frontRight.setDesiredState(1);
+  //     m_rearLeft.setDesiredState(2);
+  //     m_rearRight.setDesiredState(3);
+  // }
+
+  // public ChassisSpeeds getRobotRelativeSpeeds() {
+  //   return DriveConstants.kDriveKinematics.toChassisSpeeds(
+  //     m_frontLeft.getState(),
+  //     m_frontRight.getState(),
+  //     m_rearLeft.getState(),
+  //     m_rearRight.getState()
+  //   );
+  // }
+
   /**
    * Method to drive the robot using joystick info.
    *
@@ -122,23 +186,29 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    * @param b 
    */
+  
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean b) {
     // Convert the commanded speeds into the correct units for the drivetrain
     double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
 
+    
+
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 m_gyro.getRotation2d())
+
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+
   }
 
   /**
