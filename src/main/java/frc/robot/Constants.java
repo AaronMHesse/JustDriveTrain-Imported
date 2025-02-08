@@ -67,7 +67,10 @@ public final class Constants {
   public static final class MotorConstants {
 
   //CORAL INTAKE/OUTPUT MOTOR
-  public static final int kCoralWheels = 0;
+  public static final int kCoralWheels = 10;
+  
+  public static double kTriggerL;
+  public static double kTriggerR;
 
   }
 

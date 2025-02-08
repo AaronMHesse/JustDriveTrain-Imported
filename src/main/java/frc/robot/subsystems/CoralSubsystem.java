@@ -32,4 +32,12 @@ public class CoralSubsystem extends SubsystemBase {
         m_coralWheels.set(speed);
     }
 
+    public void c_startCoralAxis(double axis, double speed) {
+        if (axis >= 0.5) {
+            m_coralWheels.set(speed);
+        } else {
+            m_coralWheels.set(0);
+        }
+    }
+
 }
