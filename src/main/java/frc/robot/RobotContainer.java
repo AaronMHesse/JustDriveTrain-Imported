@@ -17,9 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,10 +42,10 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive;
   private final CoralSubsystem m_coralSubsystem = new CoralSubsystem();
-  private final SendableChooser<Command> autoChooser;
+  // private final SendableChooser<Command> autoChooser;
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_driverController = new XboxController(Constants.kDriverControllerPort);
 XboxController m_operatorController = new XboxController(2);
 
   /**
@@ -57,8 +55,16 @@ XboxController m_operatorController = new XboxController(2);
     // Configure the button bindings
 
     m_robotDrive = new DriveSubsystem();
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser 6175", autoChooser);
+
+    // NamedCommands.registerCommand("Run Coral Output", m_coralSubsystem.c_autoCoralWheelRun(0.5));
+    // NamedCommands.registerCommand("Stop Coral Output", m_coralSubsystem.c_autoCoralWheelRun(0));
+
+    // autoChooser = AutoBuilder.buildAutoChooser();
+    // SmartDashboard.putData("Auto Chooser 6175", autoChooser);
+
+    
+
+
 
     configureButtonBindings();
 
@@ -70,14 +76,17 @@ XboxController m_operatorController = new XboxController(2);
         new RunCommand(
 
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.60 ), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.60 ), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getRightX() * 0.8), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.60 ), Constants.kDriveDeadband),
+                -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.60 ), Constants.kDriveDeadband),
+                -MathUtil.applyDeadband((m_driverController.getRightX() * 0.8), Constants.kDriveDeadband),
                 true, true),
             m_robotDrive));
 
-new JoystickButton(m_driverController, 3).whileTrue(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(1), m_coralSubsystem));
-new JoystickButton(m_driverController, 3).whileFalse(new RunCommand(() -> m_coralSubsystem.c_startCoralAxis(Constants.MotorConstants.kTriggerR, 0.5)));
+new JoystickButton(m_driverController, 3).whileTrue(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(0.2), m_coralSubsystem));
+new JoystickButton(m_driverController, 3).whileFalse(new RunCommand(() -> m_coralSubsystem.c_startCoralAxis(Constants.kTriggerR, 0.5)));
+
+new JoystickButton(m_driverController, 2).whileTrue(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(-0.25), m_coralSubsystem));
+new JoystickButton(m_driverController, 2).whileFalse(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(0), m_coralSubsystem));
 
   }
 
@@ -104,45 +113,45 @@ new JoystickButton(m_driverController, 3).whileFalse(new RunCommand(() -> m_cora
    */
   public Command getAutonomousCommand() {
 
-      return autoChooser.getSelected();
+      // return autoChooser.getSelected();
 
     // Create config for trajectory
-    // TrajectoryConfig config = new TrajectoryConfig(
-    //     AutoConstants.kMaxSpeedMetersPerSecond,
-    //     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-    //     // Add kinematics to ensure max speed is actually obeyed
-    //     .setKinematics(DriveConstants.kDriveKinematics);
+    TrajectoryConfig config = new TrajectoryConfig(
+        Constants.kMaxSpeedMetersPerSecond,
+        Constants.kAutoMaxAccelerationMetersPerSecondSquared)
+        // Add kinematics to ensure max speed is actually obeyed
+        .setKinematics(Constants.kDriveKinematics);
 
-    // // An example trajectory to follow. All units in meters.
-    // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-    //     // Start at the origin facing the +X direction
-    //     new Pose2d(0, 0, new Rotation2d(0)),
-    //     // Pass through these two interior waypoints, making an 's' curve path
-    //     List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-    //     // End 3 meters straight ahead of where we started, facing forward
-    //     new Pose2d(3, 0, new Rotation2d(0)),
-    //     config);
+    // An example trajectory to follow. All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(0)),
+        config);
 
-    // var thetaController = new ProfiledPIDController(
-    //     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    var thetaController = new ProfiledPIDController(
+        Constants.kPThetaController, 0, 0, Constants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-    //     exampleTrajectory,
-    //     m_robotDrive::getPose, // Functional interface to feed supplier
-    //     DriveConstants.kDriveKinematics,
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        exampleTrajectory,
+        m_robotDrive::getPose, // Functional interface to feed supplier
+        Constants.kDriveKinematics,
 
-    //     // Position controllers
-    //     new PIDController(AutoConstants.kPXController, 0, 0),
-    //     new PIDController(AutoConstants.kPYController, 0, 0),
-    //     thetaController,
-    //     m_robotDrive::setModuleStates,
-    //     m_robotDrive);
+        // Position controllers
+        new PIDController(Constants.kPXController, 0, 0),
+        new PIDController(Constants.kPYController, 0, 0),
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
 
-    // // Reset odometry to the starting pose of the trajectory.
-    // m_robotDrive.resetPose(exampleTrajectory.getInitialPose());
+    // Reset odometry to the starting pose of the trajectory.
+    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
-    // // Run path following command, then stop at the end.
-    // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+    // Run path following command, then stop at the end.
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
 }

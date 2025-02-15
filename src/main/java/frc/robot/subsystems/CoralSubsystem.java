@@ -15,7 +15,7 @@ public class CoralSubsystem extends SubsystemBase {
     private final SparkMax m_coralWheels;
 
     public CoralSubsystem() {
-        m_coralWheels = new SparkMax(Constants.MotorConstants.kCoralWheels, MotorType.kBrushless);
+        m_coralWheels = new SparkMax(Constants.kCoralWheels, MotorType.kBrushless);
     }
 
     @Override
