@@ -85,7 +85,7 @@ XboxController m_operatorController = new XboxController(2);
 new JoystickButton(m_driverController, 3).whileTrue(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(0.2), m_coralSubsystem));
 new JoystickButton(m_driverController, 3).whileFalse(new RunCommand(() -> m_coralSubsystem.c_startCoralAxis(Constants.kTriggerR, 0.5)));
 
-new JoystickButton(m_driverController, 2).whileTrue(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(-0.4), m_coralSubsystem));
+new JoystickButton(m_driverController, 2).whileTrue(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(-0.275), m_coralSubsystem));
 new JoystickButton(m_driverController, 2).whileFalse(new RunCommand(() -> m_coralSubsystem.c_coralWheelRun(0), m_coralSubsystem));
 
   }
