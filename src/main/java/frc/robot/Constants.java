@@ -6,7 +6,9 @@ package frc.robot;
 
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -26,7 +28,7 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  // public static final class MyConstants {
+  public static final class MyConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -68,15 +70,30 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
+    //BUTTONS
+    public static final int kTriggerL = 11;
+    public static final int kBumperL = 5;
+    public static final int kTriggerR = 12;
+    public static final int kBumperR = 6;
+
+    public static final int kStickDownL = 9;
+    public static final int kStickDownR = 10;
+
+    public static final int kAButton = 1;
+    public static final int kBButton = 2;
+    public static final int kXButton = 3;
+    public static final int kYButton = 4;
+
+
     //MODULE CONSTANTS
-  // The MAXSwerve module can be configured with one of three pinion gears: 12T,
+    // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
     // more teeth will result in a robot that drives faster).
     public static final int kDrivingMotorPinionTeeth = 14;
     public static final int driveMotorCurrentLimit = 60;
 
     // Calculations required for driving motor conversion factors and feed forward
-    public static final double kDrivingMotorFreeSpeedRps = Constants.kNeoFreeSpeedRpm / 60;
+    public static final double kDrivingMotorFreeSpeedRps = MyConstants.kNeoFreeSpeedRpm / 60;
     public static final double kWheelDiameterMeters = Units.inchesToMeters(3);
     public static final double kWheelRadiusMeters = Units.inchesToMeters(1.5);
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
@@ -94,6 +111,12 @@ public final class Constants {
 
     public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
     public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
+
+    public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
+    public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
+
+    public static final int kDrivingMotorCurrentLimit = 50;
+    public static final int kTurningMotorCurrentLimit = 20;
 
 
     //PATHPLANNER CONFIG
@@ -121,11 +144,12 @@ public final class Constants {
               1),
           moduleTranslations);
 
-          //CORAL INTAKE/OUTPUT MOTOR
-  public static final int kCoralWheels = 10;
-  
-  public static double kTriggerL;
-  public static double kTriggerR;
+  //CORAL CLAW MOTORS
+  public static final int kCoralClawArm = 10;
+  public static final int kCoralClawWheels = 11;
+
+  //ALGAE MOTORS
+  public static final int kAlgaeArm = 12;
 
   //IO CONSTANTS
   public static final int kDriverControllerPort = 0;
@@ -144,3 +168,4 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kAutoMaxAngularSpeedRadiansPerSecond, kAutoMaxAngularSpeedRadiansPerSecondSquared);
     }
+  }

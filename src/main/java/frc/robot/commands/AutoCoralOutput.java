@@ -2,14 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.CoralClawSubsystem;
 
 public class AutoCoralOutput extends ParallelCommandGroup {
     
-public AutoCoralOutput(CoralSubsystem m_CoralSubsystem) {
+public AutoCoralOutput(CoralClawSubsystem m_coralClawSubsystem) {
 
     addCommands(
-        m_CoralSubsystem.c_autoCoralWheelRun(0.5)
+        m_coralClawSubsystem.c_autoCoralClawWheelsRun(0.5)
     );
 
     }

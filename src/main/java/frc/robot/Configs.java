@@ -1,10 +1,15 @@
 package frc.robot;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants;
+import frc.robot.Constants.MyConstants;
 
 public final class Configs {
     public static final class MAXSwerveModule {
@@ -13,10 +18,10 @@ public final class Configs {
 
         static {
             // Use module constants to calculate conversion factors and feed forward gain.
-            double drivingFactor = Constants.kWheelDiameterMeters * Math.PI
-                    / Constants.kDrivingMotorReduction;
+            double drivingFactor = Constants.MyConstants.kWheelDiameterMeters * Math.PI
+                    / Constants.MyConstants.kDrivingMotorReduction;
             double turningFactor = 2 * Math.PI;
-            double drivingVelocityFeedForward = 1 / Constants.kDriveWheelFreeSpeedRps;
+            double drivingVelocityFeedForward = 1 / Constants.MyConstants.kDriveWheelFreeSpeedRps;
 
             drivingConfig
                     .idleMode(IdleMode.kBrake)
@@ -26,7 +31,7 @@ public final class Configs {
                     .velocityConversionFactor(drivingFactor / 60.0); // meters per second
             drivingConfig.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                    // These are example gains you may need to them for your own robot!
+                    // These are example gains you may need to change them for your own robot!
                     .pid(0.04, 0, 0)
                     .velocityFF(drivingVelocityFeedForward)
                     .outputRange(-1, 1);

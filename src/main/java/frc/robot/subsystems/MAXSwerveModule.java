@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -23,10 +24,15 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Configs;
+import frc.robot.Constants;
+import frc.robot.Constants.MyConstants;
 
 public class MAXSwerveModule {
   private final SparkMax m_drivingSpark;
   private final SparkMax m_turningSpark;
+
+  private final SparkMaxConfig m_drivingConfig;
+  private final SparkMaxConfig m_turningConfig;
 
   private final RelativeEncoder m_drivingEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -52,6 +58,51 @@ public class MAXSwerveModule {
 
     m_drivingClosedLoopController = m_drivingSpark.getClosedLoopController();
     m_turningClosedLoopController = m_turningSpark.getClosedLoopController();
+
+    m_drivingConfig = new SparkMaxConfig();
+    m_turningConfig = new SparkMaxConfig();
+    
+
+    //ENCODER FEEDBACK
+    m_drivingConfig.encoder
+    .velocityConversionFactor(1)
+    .positionConversionFactor(1);
+
+    m_turningConfig.encoder
+    .velocityConversionFactor(1)
+    .positionConversionFactor(1);
+
+
+    //PIDS
+    m_drivingConfig.closedLoop
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+
+      .p(1)
+      .i(0)
+      .d(0)
+      .outputRange(-1, 1)
+
+      .p(0.01, ClosedLoopSlot.kSlot1)
+      .i(0, ClosedLoopSlot.kSlot1)
+      .d(0, ClosedLoopSlot.kSlot1)
+      .velocityFF(1.0 / 5676, ClosedLoopSlot.kSlot1)
+      .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+
+    m_turningConfig.closedLoop
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+
+      .p(1)
+      .i(0)
+      .d(0)
+      .outputRange(-1, 1)
+
+      .p(0.01, ClosedLoopSlot.kSlot1)
+      .i(0, ClosedLoopSlot.kSlot1)
+      .d(0, ClosedLoopSlot.kSlot1)
+      .velocityFF(1.0 / 5676, ClosedLoopSlot.kSlot1)
+      .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+
+
 
     // Apply the respective configurations to the SPARKS. Reset parameters before
     // applying the configuration to bring the SPARK to a known good state. Persist
