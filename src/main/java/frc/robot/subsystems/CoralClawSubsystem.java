@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.AlternateEncoderConfig.Type;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -23,7 +24,7 @@ public class CoralClawSubsystem extends SubsystemBase {
     
     private final IdleMode m_coralMotorIdle = IdleMode.kBrake;
     private final SparkFlexConfig m_coralArmMotor;
-    private final RelativeEncoder m_coralArmEncoder;
+    private final AbsoluteEncoder m_coralArmEncoder;
     private final SparkFlex m_coralClawArm;
     private final SparkMax m_coralClawWheels;
     private final SparkClosedLoopController m_coralArmClosedLoopController;
@@ -33,8 +34,10 @@ public class CoralClawSubsystem extends SubsystemBase {
         m_coralClawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
 
         m_coralArmMotor = new SparkFlexConfig();
-        m_coralArmEncoder = m_coralClawArm.getEncoder();
+        m_coralArmEncoder = m_coralClawArm.getAbsoluteEncoder();
         m_coralArmClosedLoopController = m_coralClawArm.getClosedLoopController();
+
+        m_coralClawWheels.setInverted(true);
 
         //CORAL ARM FEEDBACK
         m_coralArmMotor.encoder

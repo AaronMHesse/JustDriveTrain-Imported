@@ -41,16 +41,4 @@ XboxController m_driverController = new XboxController(MyConstants.kDriverContro
     public void c_algaePickupBlinkin() {
         blinkin.set(0.91);
     }
-
-    //When robot is moving slower
-    public void c_slowSpeedBlinkin() {
-        blinkin.set(0.63);
-    }
-
-    //When robot is moving faster
-    public void c_fastSpeedBlinkin() {
-        blinkin.set(0.89);
-    }
-
-    
 }

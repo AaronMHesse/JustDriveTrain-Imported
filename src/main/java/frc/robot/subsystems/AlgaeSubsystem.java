@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
 
+import com.ctre.phoenix6.signals.ControlModeValue;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -24,7 +27,7 @@ private final SparkMax m_topAlgaeWheels;
 private final SparkMax m_followerTopAlgaeWheels;
 private final SparkFlex m_algaeArms;
 private final SparkFlexConfig m_algaeArmsMotor;
-private final RelativeEncoder m_algaeArmsEncoder;
+private final AbsoluteEncoder m_algaeArmsEncoder;
 private final SparkClosedLoopController m_algaeArmsClosedLoopController;
 
 public AlgaeSubsystem () {
@@ -34,8 +37,9 @@ m_algaeArms = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushles
 
 m_algaeArms.setInverted(true);
 
+//m_algaeArmsMotor = new SparkFlexConfig();
 m_algaeArmsMotor = new SparkFlexConfig();
-m_algaeArmsEncoder = m_algaeArms.getEncoder();
+m_algaeArmsEncoder = m_algaeArms.getAbsoluteEncoder();
 m_algaeArmsClosedLoopController = m_algaeArms.getClosedLoopController();
 
 
@@ -47,19 +51,20 @@ m_algaeArmsMotor.encoder
 
 //PID
 m_algaeArmsMotor.closedLoop
-    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
 
-    .p(0.5)
+//     // .p(0.1)
+//     // .i(0)
+//     // .d(0.75)
+//     // .outputRange(-0.5, 0.5)
+
+    .p(0.1)
     .i(0)
-    .d(0)
-    .outputRange(-1, 1)
-
-    .p(0.01, ClosedLoopSlot.kSlot1)
-    .i(0, ClosedLoopSlot.kSlot1)
-    .d(0, ClosedLoopSlot.kSlot1)
-    .velocityFF(1.0 / 5676, ClosedLoopSlot.kSlot1)
-    .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+    .d(0.75)
+    .velocityFF(0)
+    .outputRange(-0.1, 0.1);
 }
+
 
     @Override
     public void periodic() {
@@ -67,7 +72,7 @@ m_algaeArmsMotor.closedLoop
     }
 
 
-    //ALGAE ARM//
+    //ALGAE ARMS//
     public Command c_autoAlgaeArmRun(double speed) {
 
         return new InstantCommand(() -> m_algaeArms.set(speed), this);
@@ -89,5 +94,12 @@ m_algaeArmsMotor.closedLoop
         m_followerTopAlgaeWheels.set(-speed);
     }
 
-    
+    public void c_algaeArmStow() {
+        m_algaeArmsClosedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        
+    }
+
+    public void c_algaeArmUp() {
+        m_algaeArmsClosedLoopController.setReference(-40, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    }
 }
