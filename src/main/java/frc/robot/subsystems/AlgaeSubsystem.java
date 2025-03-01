@@ -4,11 +4,13 @@ import frc.robot.Constants;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -22,49 +24,29 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeSubsystem extends SubsystemBase {
-    
-private final SparkMax m_topAlgaeWheels;
-private final SparkMax m_followerTopAlgaeWheels;
-private final SparkFlex m_algaeArms;
-private final SparkFlexConfig m_algaeArmsMotor;
-private final AbsoluteEncoder m_algaeArmsEncoder;
-private final SparkClosedLoopController m_algaeArmsClosedLoopController;
+
+private final SparkMax m_topWheels = new SparkMax(13, MotorType.kBrushless);
+private final SparkMax m_bottomWheels = new SparkMax(14, MotorType.kBrushless);
+private final SparkFlex m_armsMotor = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
+private RelativeEncoder m_ArmsEncoder;
+private SparkFlexConfig m_config = new SparkFlexConfig();
 
 public AlgaeSubsystem () {
-m_topAlgaeWheels = new SparkMax(13, MotorType.kBrushless);
-m_followerTopAlgaeWheels = new SparkMax(14, MotorType.kBrushless);
-m_algaeArms = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
 
-m_algaeArms.setInverted(true);
+//PID SETUP
+    m_config
+    .inverted(false)
+    .idleMode(IdleMode.kBrake);
+    m_config.encoder
+    .positionConversionFactor(1)
+    .velocityConversionFactor(45);
+    m_config.closedLoop
+    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    .pid(0.1, 0, 0.75)
+    .outputRange(-0.5, 0.5);
 
-//m_algaeArmsMotor = new SparkFlexConfig();
-m_algaeArmsMotor = new SparkFlexConfig();
-m_algaeArmsEncoder = m_algaeArms.getAbsoluteEncoder();
-m_algaeArmsClosedLoopController = m_algaeArms.getClosedLoopController();
-
-
-//ALGAE ARMS MOTOR FEEDBACK
-m_algaeArmsMotor.encoder
-.velocityConversionFactor(1)
-.positionConversionFactor(1);
-
-
-//PID
-m_algaeArmsMotor.closedLoop
-    .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-
-//     // .p(0.1)
-//     // .i(0)
-//     // .d(0.75)
-//     // .outputRange(-0.5, 0.5)
-
-    .p(0.1)
-    .i(0)
-    .d(0.75)
-    .velocityFF(0)
-    .outputRange(-0.1, 0.1);
+    m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
-
 
     @Override
     public void periodic() {
@@ -75,31 +57,31 @@ m_algaeArmsMotor.closedLoop
     //ALGAE ARMS//
     public Command c_autoAlgaeArmRun(double speed) {
 
-        return new InstantCommand(() -> m_algaeArms.set(speed), this);
+        return new InstantCommand(() -> m_armsMotor.set(speed), this);
     }
 
     public void c_algaeArmRun(double speed) {
-        m_algaeArms.set(speed);
+        m_armsMotor.set(speed);
     }
 
 
     // ALGAE WHEELS//
     public Command c_autoAlgaeWheelsRun(double speed) {
 
-        return new InstantCommand(() -> m_topAlgaeWheels.set(speed), this);
+        return new InstantCommand(() -> m_topWheels.set(speed), this);
     }
 
     public void c_algaeWheelsRun(double speed) {
-        m_topAlgaeWheels.set(speed);
-        m_followerTopAlgaeWheels.set(-speed);
+        m_topWheels.set(speed);
+        m_bottomWheels.set(-speed);
     }
 
-    public void c_algaeArmStow() {
-        m_algaeArmsClosedLoopController.setReference(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    public void c_algaeArmsSetResting() {
+        m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition);
         
     }
 
-    public void c_algaeArmUp() {
-        m_algaeArmsClosedLoopController.setReference(-40, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    public void c_algaeArmsSetIntake() {
+        m_armsMotor.getClosedLoopController().setReference(70, ControlType.kPosition);
     }
 }
