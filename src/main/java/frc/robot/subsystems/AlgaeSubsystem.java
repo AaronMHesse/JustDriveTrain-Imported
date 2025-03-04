@@ -33,7 +33,7 @@ private SparkFlexConfig m_config = new SparkFlexConfig();
 
 public AlgaeSubsystem () {
 
-//PID SETUP
+    //PID SETUP
     m_config
     .inverted(false)
     .idleMode(IdleMode.kBrake);
@@ -55,13 +55,26 @@ public AlgaeSubsystem () {
 
 
     //ALGAE ARMS//
-    public Command c_autoAlgaeArmRun(double speed) {
+    public Command c_autoAlgaeArmsRun(double speed) {
 
         return new InstantCommand(() -> m_armsMotor.set(speed), this);
     }
 
-    public void c_algaeArmRun(double speed) {
+    public Command c_autoAlgaeArmsSetResting() {
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition), this);
+    }
+
+    public void c_algaeArmsRun(double speed) {
         m_armsMotor.set(speed);
+    }
+
+    public void c_algaeArmsSetResting() {
+        m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition);
+        
+    }
+
+    public void c_algaeArmsSetIntake() {
+        m_armsMotor.getClosedLoopController().setReference(70, ControlType.kPosition);
     }
 
 
@@ -74,14 +87,5 @@ public AlgaeSubsystem () {
     public void c_algaeWheelsRun(double speed) {
         m_topWheels.set(speed);
         m_bottomWheels.set(-speed);
-    }
-
-    public void c_algaeArmsSetResting() {
-        m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition);
-        
-    }
-
-    public void c_algaeArmsSetIntake() {
-        m_armsMotor.getClosedLoopController().setReference(70, ControlType.kPosition);
     }
 }

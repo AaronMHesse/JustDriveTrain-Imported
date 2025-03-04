@@ -7,6 +7,8 @@ import com.revrobotics.spark.config.AlternateEncoderConfig.Type;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -22,43 +24,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralClawSubsystem extends SubsystemBase {
     
-    private final IdleMode m_coralMotorIdle = IdleMode.kBrake;
-    private final SparkFlexConfig m_coralArmMotor;
-    private final AbsoluteEncoder m_coralArmEncoder;
-    private final SparkFlex m_coralClawArm;
-    private final SparkMax m_coralClawWheels;
-    private final SparkClosedLoopController m_coralArmClosedLoopController;
+private final SparkFlex m_clawArm = new SparkFlex(Constants.MyConstants.kCoralClawArm, MotorType.kBrushless);
+private final SparkMax m_clawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
+private SparkFlexConfig m_config = new SparkFlexConfig();
+private RelativeEncoder m_armEncoder;
 
-    public CoralClawSubsystem() {
-        m_coralClawArm = new SparkFlex(Constants.MyConstants.kCoralClawArm, MotorType.kBrushless);
-        m_coralClawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
+public CoralClawSubsystem() {
 
-        m_coralArmMotor = new SparkFlexConfig();
-        m_coralArmEncoder = m_coralClawArm.getAbsoluteEncoder();
-        m_coralArmClosedLoopController = m_coralClawArm.getClosedLoopController();
+    //PID SETUP
+    m_config
+    .inverted(false)
+    .idleMode(IdleMode.kBrake);
+    m_config.encoder
+    .positionConversionFactor(1)
+    .velocityConversionFactor(5);
+    m_config.closedLoop
+    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    .pidf(0.05, 0, 0.55, -.5)
+    .outputRange(-0.5, 0.5);
 
-        m_coralClawWheels.setInverted(true);
-
-        //CORAL ARM FEEDBACK
-        m_coralArmMotor.encoder
-        .velocityConversionFactor(1)
-        .positionConversionFactor(1);
-
-        //PID
-        m_coralArmMotor.closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-
-            .p(0.5)
-            .i(0)
-            .d(0)
-            .outputRange(-1, 1)
-
-            .p(0.01, ClosedLoopSlot.kSlot1)
-            .i(0, ClosedLoopSlot.kSlot1)
-            .d(0, ClosedLoopSlot.kSlot1)
-            .velocityFF(1.0 / 5676, ClosedLoopSlot.kSlot1)
-            .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
-    }
+    m_clawArm.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+}
 
     @Override
     public void periodic() {
@@ -69,21 +55,21 @@ public class CoralClawSubsystem extends SubsystemBase {
     //CORAL ARM//
     public Command c_autoCoralClawArmRun(double speed) {
         
-        return new InstantCommand(() -> m_coralClawArm.set(speed), this);
+        return new InstantCommand(() -> m_clawArm.set(speed), this);
     }
 
     public void c_coralClawArmRun(double speed) {
-        m_coralClawArm.set(speed);
+        m_clawArm.set(speed);
     }
 
 
     //CORAL WHEELS//
     public Command c_autoCoralClawWheelsRun(double speed) {
         
-        return new InstantCommand(() -> m_coralClawWheels.set(speed), this);
+        return new InstantCommand(() -> m_clawWheels.set(speed), this);
     }
 
     public void c_coralClawWheelsRun(double speed) {
-        m_coralClawWheels.set(speed);
+        m_clawWheels.set(speed);
     }
 }
