@@ -123,21 +123,21 @@ public class DriveSubsystem extends SubsystemBase {
       
 
   /** Creates a new DriveSubsystem. 
- * @throws ParseException 
- * @throws IOException */
+  * @throws ParseException 
+  * @throws IOException */
   
 
-  public DriveSubsystem() throws IOException, ParseException {
+  public DriveSubsystem() throws IOException, ParseException  {
 
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
 
     RobotConfig config = RobotConfig.fromGUISettings();
-    // try{
-    //   config = RobotConfig.fromGUISettings();
-    // } catch (Exception e) {
-    //   // Handle exception as needed
-    //   e.printStackTrace();
-    // }
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
 
     AutoBuilder.configure(
         this::getPose,
@@ -208,7 +208,6 @@ public class DriveSubsystem extends SubsystemBase {
     //   },
     //   this
     // );
-    // Usage reporting for MAXSwerve template
     
   
 

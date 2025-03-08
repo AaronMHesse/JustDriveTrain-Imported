@@ -43,7 +43,7 @@ public AlgaeSubsystem () {
     m_config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.1, 0, 0.75)
-    .outputRange(-0.5, 0.5);
+    .outputRange(-0.1, 0.1);
 
     m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -74,7 +74,7 @@ public AlgaeSubsystem () {
     }
 
     public void c_algaeArmsSetIntake() {
-        m_armsMotor.getClosedLoopController().setReference(70, ControlType.kPosition);
+        m_armsMotor.getClosedLoopController().setReference(60, ControlType.kPosition);
     }
 
 

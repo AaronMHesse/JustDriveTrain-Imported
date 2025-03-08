@@ -9,7 +9,7 @@ public class AutoCoralOutput extends ParallelCommandGroup {
 public AutoCoralOutput(CoralClawSubsystem m_coralClawSubsystem) {
 
     addCommands(
-        m_coralClawSubsystem.c_autoCoralClawWheelsRun(0.5)
+        m_coralClawSubsystem.c_autoCoralWheelsRun(0.5)
     );
 
     }

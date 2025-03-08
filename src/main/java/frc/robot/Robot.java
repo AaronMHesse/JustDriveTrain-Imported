@@ -31,9 +31,6 @@ import edu.wpi.first.cameraserver.CameraServer;
  */
 public class Robot extends TimedRobot {
 
-SparkMax ktopAlgaeWheels;
-SparkMax kfollowerTopAlgaeWheels;
-
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
