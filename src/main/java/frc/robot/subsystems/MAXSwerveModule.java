@@ -79,7 +79,7 @@ public class MAXSwerveModule {
     m_drivingConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
 
-      .p(1)
+      .p(1.0)
       .i(0)
       .d(0)
       .outputRange(-1, 1)

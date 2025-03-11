@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,6 +26,7 @@ import frc.robot.Constants.MyConstants;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.Blinkin;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.CoralClawSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -39,6 +41,7 @@ import java.util.List;
 import org.json.simple.parser.ParseException;
 
 import com.ctre.phoenix6.configs.GyroTrimConfigs;
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -54,8 +57,8 @@ public class RobotContainer {
   
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive;
-  private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
   private final Blinkin m_blinkin = new Blinkin();
+  private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public final CoralClawSubsystem m_coralClawSubsystem = new CoralClawSubsystem();
   // public final TempAlgae m_TempAlgae = new TempAlgae();
   public final AlgaeSubsystem m_AlgaeSubsystem = new AlgaeSubsystem();
@@ -79,8 +82,15 @@ public class RobotContainer {
 
     m_robotDrive = new DriveSubsystem();
 
-    NamedCommands.registerCommand("Run Coral Output", m_coralClawSubsystem.c_autoCoralWheelsRun(0.5));
-    NamedCommands.registerCommand("Stop Coral Output", m_coralClawSubsystem.c_autoCoralWheelsRun(0));
+    NamedCommands.registerCommand("CoralOutput", m_coralClawSubsystem.c_autoCoralWheelsRun(-0.5));
+    NamedCommands.registerCommand("StopCoralOutput", m_coralClawSubsystem.c_autoCoralWheelsRun(0));
+    NamedCommands.registerCommand("AlgaeIntake", m_AlgaeSubsystem.c_autoAlgaeWheelsRun(-0.8));
+    NamedCommands.registerCommand("AlgaeOutput", m_AlgaeSubsystem.c_autoAlgaeArmsRun(0.7));
+    NamedCommands.registerCommand("AlgaeArmIntake", m_AlgaeSubsystem.c_autoAlgaeArmsSetIntake());
+    NamedCommands.registerCommand("AlgaeArmHoldRest", m_AlgaeSubsystem.c_autoAlgaeArmsSetHoldResting());
+    NamedCommands.registerCommand("CoralArmHoldRest", m_coralClawSubsystem.c_autoCoralArmSetHoldResting());
+    NamedCommands.registerCommand("CoralArmIntake", m_coralClawSubsystem.c_autoCoralArmSetIntake());
+    NamedCommands.registerCommand("CoralArmTrough", m_coralClawSubsystem.c_autoCoralArmSetTrough());
 
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -108,70 +118,54 @@ public class RobotContainer {
 
 
 // DRIVER BUTTONS
-new JoystickButton(m_driverController, MyConstants.kXButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0.1), m_coralClawSubsystem));
-new JoystickButton(m_driverController, MyConstants.kXButton).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0), m_coralClawSubsystem));
+// new JoystickButton(m_driverController, MyConstants.kXButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0.1), m_coralClawSubsystem));
+// new JoystickButton(m_driverController, MyConstants.kXButton).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0), m_coralClawSubsystem));
 
-new JoystickButton(m_driverController, MyConstants.kBButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(-0.05), m_coralClawSubsystem));
-new JoystickButton(m_driverController, MyConstants.kBButton).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0), m_coralClawSubsystem));
+// new JoystickButton(m_driverController, MyConstants.kBButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(-0.05), m_coralClawSubsystem));
+// new JoystickButton(m_driverController, MyConstants.kBButton).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0), m_coralClawSubsystem));
+new JoystickButton(m_driverController, MyConstants.kXButton).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_freeArm(), m_AlgaeSubsystem));
+new JoystickButton(m_driverController, MyConstants.kXButton).onFalse(new RunCommand(() -> m_AlgaeSubsystem.c_resetEncoder(), m_AlgaeSubsystem));
 
-new JoystickButton(m_driverController, MyConstants.kYButton).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsRun(0.2), m_AlgaeSubsystem));
+new JoystickButton(m_driverController, MyConstants.kYButton).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsRun(0.1), m_AlgaeSubsystem));
 new JoystickButton(m_driverController, MyConstants.kYButton).whileFalse(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsRun(0), m_AlgaeSubsystem));
 
-new JoystickButton(m_driverController, MyConstants.kAButton).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsRun(-0.15), m_AlgaeSubsystem));
+new JoystickButton(m_driverController, MyConstants.kAButton).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsRun(-0.1), m_AlgaeSubsystem));
 new JoystickButton(m_driverController, MyConstants.kAButton).whileFalse(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsRun(0), m_AlgaeSubsystem));
 
 
     // DRIVER SPEED BUTTONS
-if (m_driverController.getRightBumperButtonReleased()) {
-new JoystickButton(m_driverController, MyConstants.kBumperL).whileTrue(new RunCommand(
-  () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.20), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.20), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getRightX()) * 0.4, MyConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
-new JoystickButton(m_driverController, MyConstants.kBumperL).whileFalse(new RunCommand(
-  () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.60), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.60), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getRightX()) * 0.8, MyConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
-}
+// new JoystickButton(m_driverController, MyConstants.kBumperL).whileTrue(new RunCommand(
+//   () -> m_robotDrive.drive(
+//                 -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.20), MyConstants.kDriveDeadband),
+//                 -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.20), MyConstants.kDriveDeadband),
+//                 -MathUtil.applyDeadband((m_driverController.getRightX()) * 0.4, MyConstants.kDriveDeadband),
+//                 true, true),
+//             m_robotDrive));
+// new JoystickButton(m_driverController, MyConstants.kBumperL).whileFalse(new RunCommand(
+//   () -> m_robotDrive.drive(
+//                 -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.60), MyConstants.kDriveDeadband),
+//                 -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.60), MyConstants.kDriveDeadband),
+//                 -MathUtil.applyDeadband((m_driverController.getRightX()) * 0.8, MyConstants.kDriveDeadband),
+//                 true, true),
+//             m_robotDrive));
 
-if (m_driverController.getLeftBumperButtonReleased()) {
-  new JoystickButton(m_driverController, MyConstants.kBumperR).whileTrue(new RunCommand(
-  () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), MyConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
-new JoystickButton(m_driverController, MyConstants.kBumperR).whileFalse(new RunCommand(
-  () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband((m_driverController.getLeftY() * 0.60), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getLeftX() * 0.60), MyConstants.kDriveDeadband),
-                -MathUtil.applyDeadband((m_driverController.getRightX()) * 0.8, MyConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
-}
 
 
 // //D-PAD UP
-new POVButton(m_driverController, 0).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(0.6), m_coralClawSubsystem));
-new POVButton(m_driverController, 0).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(0), m_coralClawSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperR).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(0.6), m_coralClawSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperR).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(0), m_coralClawSubsystem));
 
 //D-PAD DOWN
-new POVButton(m_driverController, 180).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(-0.5), m_coralClawSubsystem));
-new POVButton(m_driverController, 180).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(0), m_coralClawSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperL).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(-0.5), m_coralClawSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperL).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsRun(0), m_coralClawSubsystem));
 
 //D-PAD RIGHT
-new POVButton(m_driverController, 90).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(1.0), m_AlgaeSubsystem));
-new POVButton(m_driverController, 90).whileFalse(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(0), m_AlgaeSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperR).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(1.0), m_AlgaeSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperR).whileFalse(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(0), m_AlgaeSubsystem));
 
 //D-PAD LEFT
-new POVButton(m_driverController, 270).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(-0.6), m_AlgaeSubsystem));
-new POVButton(m_driverController, 270).whileFalse(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(0), m_AlgaeSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperL).whileTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(-0.8), m_AlgaeSubsystem));
+new JoystickButton(m_driverController, MyConstants.kBumperL).whileFalse(new RunCommand(() -> m_AlgaeSubsystem.c_algaeWheelsRun(0), m_AlgaeSubsystem));
 
 // //ALGAE ARM STRAIGHT
 // new JoystickButton(m_driverController, 1).onTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsSetResting(), m_AlgaeSubsystem));
@@ -181,10 +175,20 @@ new POVButton(m_driverController, 270).whileFalse(new RunCommand(() -> m_AlgaeSu
 
 
 //OPERATOR BUTTON BOARD
-new JoystickButton(m_operatorBoard, 1).onTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsSetIntake(), m_AlgaeSubsystem));
-new JoystickButton(m_operatorBoard, 2).onTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsSetResting(), m_AlgaeSubsystem));
-new JoystickButton(m_driverController, 3).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmSetIntake(), m_coralClawSubsystem));
-new JoystickButton(m_driverController, 4).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmSetResting(), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 4).onTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsSetIntake(), m_AlgaeSubsystem));
+new JoystickButton(m_operatorBoard, 1).onTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsSetResting(), m_AlgaeSubsystem));
+new JoystickButton(m_operatorBoard, 3).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0.25), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 6).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(-0.1), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 3).onFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 6).onFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmRun(0), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 10).onTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsSetProcessor(), m_AlgaeSubsystem));
+new JoystickButton(m_operatorBoard, 7).onTrue(new RunCommand(() -> m_AlgaeSubsystem.c_algaeArmsSetHoldResting(), m_AlgaeSubsystem));
+new JoystickButton(m_operatorBoard, 9).onFalse(new RunCommand(() -> m_coralClawSubsystem.c_resetCoralEncoder(), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 2).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmSetResting(), m_coralClawSubsystem));
+//MAKE ELEVATOR GO UP ~3IN
+new JoystickButton(m_operatorBoard, 5).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmSetIntake(), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 8).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmSetGIntake(), m_coralClawSubsystem));
+new JoystickButton(m_operatorBoard, 12).onTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
 
                       //BLINKIN COMMANDS//
@@ -204,10 +208,10 @@ new POVButton(m_driverController, 270).whileTrue(new RunCommand(() -> m_blinkin.
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+    // new JoystickButton(m_driverController, Button.kR1.value)
+    //     .whileTrue(new RunCommand(
+    //         () -> m_robotDrive.setX(),
+    //         m_robotDrive));
   }
 
   // /**
@@ -215,10 +219,6 @@ new POVButton(m_driverController, 270).whileTrue(new RunCommand(() -> m_blinkin.
   //  *
   //  * @return the command to run in autonomous
   //  */
-  // public Command getAutonomousCommand() {
-
-      // return autoChooser.getSelected();
-
   //   // Create config for trajectory
   //   TrajectoryConfig config = new TrajectoryConfig(
   //     Constants.MyConstants.kMaxSpeedMetersPerSecond,
@@ -258,4 +258,10 @@ new POVButton(m_driverController, 270).whileTrue(new RunCommand(() -> m_blinkin.
   //   // Run path following command, then stop at the end.
   //   return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   // }
+
+
+  public Command getAutonomousCommand() {
+
+    return autoChooser.getSelected();
+  }
 }
