@@ -1,9 +1,6 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -13,6 +10,8 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -47,20 +46,59 @@ m_elevatorMotor2.setInverted(true);
 
   }
 
-//POSITIONING
+    //ELEVATOR POSITIONING
+  public Command c_autoElevatorDown() {
+    return new InstantCommand(() -> {
+      m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
+    }, this);
+  }
+
+  public Command c_autoElevatorL3() {
+    return new InstantCommand(() -> {
+    m_elevatorMotor1.getClosedLoopController().setReference(60, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-60, ControlType.kPosition);
+    }, this);
+  }
+
+  public Command c_autoElevatorL4() {
+    return new InstantCommand(() -> {
+    m_elevatorMotor1.getClosedLoopController().setReference(100, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-100, ControlType.kPosition);
+    }, this);
+  }
+
+  //WILL CHANGE
+  public Command c_autoElevatorBarge() {
+    return new InstantCommand(() -> {
+      m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
+    }, this);
+  }
+
   public void c_elevatorDown() {
     m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
     m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
   }
 
-  public void c_elevatorUp() {
-    m_elevatorMotor1.getClosedLoopController().setReference(40, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-40, ControlType.kPosition);
+  public void c_elevatorL3() {
+    m_elevatorMotor1.getClosedLoopController().setReference(60, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-60, ControlType.kPosition);
+  }
+
+  public void c_elevatorL4() {
+    m_elevatorMotor1.getClosedLoopController().setReference(100, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-100, ControlType.kPosition);
+  }
+  
+  //WILL CHANGE
+  public void c_elevatorBarge() {
+    m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
   }
 
   public void c_elevatorJog(double speed) {
     m_elevatorMotor1.set(speed);
     m_elevatorMotor2.set(-speed);
   }
-
 }
