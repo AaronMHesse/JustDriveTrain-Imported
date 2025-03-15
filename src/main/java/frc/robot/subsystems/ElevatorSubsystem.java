@@ -101,4 +101,13 @@ m_elevatorMotor2.setInverted(true);
     m_elevatorMotor1.set(speed);
     m_elevatorMotor2.set(-speed);
   }
+
+
+  //RESET METHOD
+  public Command c_resetElevatorEncoders() {
+    return new InstantCommand(() -> {
+      m_elevatorMotor1.getEncoder().setPosition(0);
+      m_elevatorMotor2.getEncoder().setPosition(0);
+    });
+  }
 }

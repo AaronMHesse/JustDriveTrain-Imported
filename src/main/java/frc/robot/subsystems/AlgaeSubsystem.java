@@ -112,22 +112,10 @@ public AlgaeSubsystem () {
 
 
 
-    //RESET METHODS
-    public void c_freeArm() {
-        m_config
-        .idleMode(IdleMode.kCoast)
-        .inverted(false);
-
-        m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters , PersistMode.kPersistParameters);
-    }
-
-    public void c_resetEncoder() {
+    //RESET METHOD
+    public Command c_resetAlgaeEncoder() {
+        return new InstantCommand(() -> {
         m_armsMotor.getEncoder().setPosition(0);
-
-        m_config
-        .idleMode(IdleMode.kBrake)
-        .inverted(false);
-
-        m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        });
     }
 }

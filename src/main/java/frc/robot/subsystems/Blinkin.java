@@ -16,33 +16,31 @@ XboxController m_driverController = new XboxController(MyConstants.kDriverContro
 		blinkin = new Spark(0);
 	}
 
+  //When no buttons are pressed
     public void c_lightsNormal() {
-		blinkin.set(-0.99);
+		blinkin.set(-0.41);
 	}
-
-    public void c_lightSet(double value) {
-        blinkin.set(value);
-      }
 
   //When picking up from either side
   public void c_armsPickup() {
-    blinkin.set(-0.71);
+    blinkin.set(-0.91);
   }
 
   //When shooting from either side
   public void c_armsOutput() {
-    blinkin.set(-0.31);
+    blinkin.set(-0.93);
   }
 
+
   public Command c_autoBlinkinPickup() {
-    return new InstantCommand(() -> blinkin.set(-0.71));
+    return new InstantCommand(() -> blinkin.set(-0.91));
   }
 
   public Command c_autoBlinkinOutput() {
-    return new InstantCommand(() -> blinkin.set(-0.31));
+    return new InstantCommand(() -> blinkin.set(-0.93));
   }
 
-  public Command c_autoBlinkinStandard() {
+  public Command c_autoBlinkinNormal() {
     return new InstantCommand(() -> blinkin.set(-0.41));
   }
 }

@@ -114,22 +114,10 @@ public CoralClawSubsystem() {
 
 
    
-    //RESET METHODS
-    public void c_freeCoralArm() {
-        m_clawConfig
-        .idleMode(IdleMode.kCoast)
-        .inverted(true);
-
-        m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    }
-
-    public void c_resetCoralEncoder() {
+    //RESET METHOD
+    public Command c_resetCoralEncoder() {
+        return new InstantCommand(() -> {
         m_clawArm.getEncoder().setPosition(0);
-
-        m_clawConfig
-        .idleMode(IdleMode.kBrake)
-        .inverted(true);
-
-        m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        });
     }
 }
