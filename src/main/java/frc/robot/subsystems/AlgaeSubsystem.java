@@ -73,11 +73,11 @@ public AlgaeSubsystem () {
     }
 
     public Command c_autoAlgaeArmsProcessor() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(55, ControlType.kPosition));
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(45, ControlType.kPosition));
     }
 
     public Command c_autoAlgaeArmsIntake() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(70, ControlType.kPosition));
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(63, ControlType.kPosition));
     }
 
     public void c_algaeArmsResting() {
@@ -90,24 +90,21 @@ public AlgaeSubsystem () {
     }
 
     public void c_algaeArmsProcessor() {
-        m_armsMotor.getClosedLoopController().setReference(55, ControlType.kPosition);
+        m_armsMotor.getClosedLoopController().setReference(45, ControlType.kPosition);
     }
 
     public void c_algaeArmsIntake() {
-        m_armsMotor.getClosedLoopController().setReference(70, ControlType.kPosition);
+        m_armsMotor.getClosedLoopController().setReference(63, ControlType.kPosition);
     }
  
 
 
     // ALGAE WHEELS//
-    public Command c_autoAlgaeWheelsRun(double speed) {
-
-        return new InstantCommand(() -> m_topWheels.set(speed), this);
-    }
-
-    public void c_algaeWheelsRun(double speed) {
-        m_topWheels.set(speed);
-        m_bottomWheels.set(-speed);
+    public Command c_algaeWheelsRun(double speed) {
+        return new InstantCommand(() -> {
+            m_topWheels.set(speed);
+            m_bottomWheels.set(-speed);
+        });
     }
 
 

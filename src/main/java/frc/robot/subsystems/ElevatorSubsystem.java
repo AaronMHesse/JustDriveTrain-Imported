@@ -51,21 +51,21 @@ m_elevatorMotor2.setInverted(true);
     return new InstantCommand(() -> {
       m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
       m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
-    }, this);
+    });
   }
 
   public Command c_autoElevatorL3() {
     return new InstantCommand(() -> {
     m_elevatorMotor1.getClosedLoopController().setReference(60, ControlType.kPosition);
     m_elevatorMotor2.getClosedLoopController().setReference(-60, ControlType.kPosition);
-    }, this);
+    });
   }
 
   public Command c_autoElevatorL4() {
     return new InstantCommand(() -> {
     m_elevatorMotor1.getClosedLoopController().setReference(100, ControlType.kPosition);
     m_elevatorMotor2.getClosedLoopController().setReference(-100, ControlType.kPosition);
-    }, this);
+    });
   }
 
   //WILL CHANGE
@@ -73,7 +73,7 @@ m_elevatorMotor2.setInverted(true);
     return new InstantCommand(() -> {
       m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
       m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
-    }, this);
+    });
   }
 
   public void c_elevatorDown() {
