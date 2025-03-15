@@ -42,7 +42,7 @@ public AlgaeSubsystem () {
     m_config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.1, 0, 0.75)
-    .outputRange(-0.5, 0.5);
+    .outputRange(-0.3, 0.3);
 
     m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -54,11 +54,11 @@ public AlgaeSubsystem () {
 
 
     //ALGAE ARMS//
-    public Command c_autoAlgaeArmsRun(double speed) {
+    public Command c_autoAlgaeArmsJog(double speed) {
         return new InstantCommand(() -> m_armsMotor.set(speed));
     }
 
-    public void c_algaeArmsRun(double speed) {
+    public void c_algaeArmsJog(double speed) {
         m_armsMotor.set(speed);
     }
 

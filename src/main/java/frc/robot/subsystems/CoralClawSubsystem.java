@@ -46,7 +46,7 @@ public CoralClawSubsystem() {
     m_clawConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pidf(0.15, 0, 0.55, 0.01)
-    .outputRange(-0.3, 0.3);
+    .outputRange(-0.2, 0.2);
 
     m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -57,13 +57,9 @@ public CoralClawSubsystem() {
     }
 
     
-    //CORAL ARM//
-    public Command c_autoCoralArmRun(double speed) {
-        
-        return new InstantCommand(() -> m_clawArm.set(speed));
-    }
+    //CORAL ARM
 
-    public void c_coralArmRun(double speed) {
+    public void c_coralArmJog(double speed) {
         m_clawArm.set(-speed);
     }
 
@@ -100,16 +96,11 @@ public CoralClawSubsystem() {
         m_clawArm.getClosedLoopController().setReference(19, ControlType.kPosition);
     }
 
-  
     
   
-    //CORAL WHEELS//
-    public Command c_autoCoralWheelsRun(double speed) {
+    //CORAL WHEELS
+    public Command c_coralWheelsRun(double speed) {
         return new InstantCommand(() -> m_clawWheels.set(speed), this);
-    }
-
-    public void c_coralWheelsRun(double speed) {
-        m_clawWheels.set(speed);
     }
 
 
