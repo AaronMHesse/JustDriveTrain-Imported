@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
 
+import org.ejml.dense.row.misc.RrefGaussJordanRowPivot_DDRM;
+
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -18,6 +20,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -38,18 +41,18 @@ public AlgaeSubsystem () {
     .idleMode(IdleMode.kBrake);
     m_config.encoder
     .positionConversionFactor(1)
-    .velocityConversionFactor(45);
+    .velocityConversionFactor(80);
     m_config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.1, 0, 0.75)
     .outputRange(-0.3, 0.3);
 
-    m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  
 }
 
     @Override
     public void periodic() {
-
+        SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getEncoder().getPosition());
     }
 
 
@@ -64,25 +67,20 @@ public AlgaeSubsystem () {
 
 
         //POSITIONING
-    public Command c_autoAlgaeArmsResting() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition));
+    public Command c_algaeArmsResting() {
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition), this);
     }
 
     public Command c_autoAlgaeArmsHoldResting() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(30, ControlType.kPosition));
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(30, ControlType.kPosition), this);
     }
 
     public Command c_autoAlgaeArmsProcessor() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(45, ControlType.kPosition));
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(45, ControlType.kPosition), this);
     }
 
     public Command c_autoAlgaeArmsIntake() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(63, ControlType.kPosition));
-    }
-
-    public void c_algaeArmsResting() {
-        m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition);
-        
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(63, ControlType.kPosition), this);
     }
 
     public void c_algaeArmsHoldResting() {

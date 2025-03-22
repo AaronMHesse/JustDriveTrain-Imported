@@ -19,6 +19,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -53,7 +54,7 @@ public CoralClawSubsystem() {
 
     @Override
     public void periodic() {
-
+        SmartDashboard.putNumber("Coral Arm Position", m_clawArm.getEncoder().getPosition());
     }
 
     
@@ -65,35 +66,36 @@ public CoralClawSubsystem() {
 
 
         //POSITIONING
-    public Command c_autoCoralArmResting() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(0, ControlType.kPosition));
+    public Command c_coralArmResting() {
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(0, ControlType.kPosition), this);
     }
 
     public Command c_autoCoralArmHoldResting() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(4, ControlType.kPosition));
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(4, ControlType.kPosition), this);
     }
 
     public Command c_autoCoralArmIntake() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(22, ControlType.kPosition));
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(17.3, ControlType.kPosition), this);
     }
 
-    public Command c_autoCoralArmTrough() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(13, ControlType.kPosition));
+    public Command c_coralL2() {
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(8.5, ControlType.kPosition), this);
     }
 
-    public void c_coralArmResting() {
-        m_clawArm.getClosedLoopController().setReference(0, ControlType.kPosition);
+    public Command c_coralArmStation() {
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(2, ControlType.kPosition), this);
     }
+
+    public Command c_coralL4() {
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(12.5, ControlType.kPosition), this);
+    }
+
     public void c_coralArmHoldResting() {
         m_clawArm.getClosedLoopController().setReference(4, ControlType.kPosition);
     }
 
-    public void c_coralArmTrough() {
-        m_clawArm.getClosedLoopController().setReference(13, ControlType.kPosition);
-    }
-
-    public void c_coralArmGIntake() {
-        m_clawArm.getClosedLoopController().setReference(21, ControlType.kPosition);
+    public void c_coralArmIntake() {
+        m_clawArm.getClosedLoopController().setReference(17.3, ControlType.kPosition);
     }
 
     

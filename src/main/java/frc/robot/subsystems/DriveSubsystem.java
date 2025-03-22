@@ -48,7 +48,6 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.json.simple.parser.ParseException;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class DriveSubsystem extends SubsystemBase {
 

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.MyConstants;
+import frc.robot.commands.CoralStationPickup;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.Blinkin;
 import frc.robot.subsystems.DriveSubsystem;
@@ -28,14 +29,22 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.CoralClawSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import java.io.IOException;
 import java.lang.ModuleLayer.Controller;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
+
+import javax.print.attribute.standard.JobStateReasons;
 
 import org.json.simple.parser.ParseException;
 
@@ -60,6 +69,8 @@ public class RobotContainer {
   public final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   private final SendableChooser<Command> autoChooser;
+
+//   private ParallelCommandGroup L2Elevator(m_coralClawSubsystem, m_elevatorSubsystem)
 
   //CONTROLLERS SETUP
   XboxController m_driverController = new XboxController(0);
@@ -103,9 +114,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorDown", m_elevatorSubsystem.c_autoElevatorDown());
     NamedCommands.registerCommand("ElevatorLevel3", m_elevatorSubsystem.c_autoElevatorL3());
     NamedCommands.registerCommand("ElevatorLevel4", m_elevatorSubsystem.c_autoElevatorL4());
-    NamedCommands.registerCommand("ElevatorBarge", m_elevatorSubsystem.c_autoElevatorBarge());
 
-        //BLINKING COMMANDS
+        //SOON TO BE CONNECTOR-X/LUMYN LABS COMMANDS
     NamedCommands.registerCommand("BlinkinPickup", m_blinkin.c_autoBlinkinPickup());
     NamedCommands.registerCommand("BlinkinOutput", m_blinkin.c_autoBlinkinOutput());
     NamedCommands.registerCommand("StandardBlinkin", m_blinkin.c_autoBlinkinNormal());
@@ -128,12 +138,12 @@ public class RobotContainer {
 
 //DRIVER BUTTONS
 
-    //ZERO GYRO
+    //ZERO GYRO                             OPTION BUTTON
     new JoystickButton(m_driverController, 8).onTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
 
 
-   //RESET ENCODERS
+   //RESET ENCODERS                         SHARE BUTTON
     new JoystickButton(m_driverController, 7).onTrue(new ParallelCommandGroup(
         m_coralClawSubsystem.c_resetCoralEncoder(),
         m_algaeSubsystem.c_resetAlgaeEncoder(),
@@ -165,6 +175,14 @@ public class RobotContainer {
 
     //MANUAL CONTROLS
 
+        //ALL MANIPULATORS
+                                        //LEFT STICK DOWN
+    new JoystickButton(m_driverController, 9).onTrue(new ParallelCommandGroup(
+        m_elevatorSubsystem.c_autoElevatorDown(),
+        m_coralClawSubsystem.c_coralArmResting(),
+        m_algaeSubsystem.c_algaeArmsResting()
+    ));
+
         //ALGAE ARMS
     new JoystickButton(m_driverController, MyConstants.kYButton).whileTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsJog(0.2), m_algaeSubsystem));
     new JoystickButton(m_driverController, MyConstants.kYButton).whileFalse(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsJog(0), m_algaeSubsystem));
@@ -172,53 +190,70 @@ public class RobotContainer {
     new JoystickButton(m_driverController, MyConstants.kAButton).whileFalse(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsJog(0), m_algaeSubsystem));
 
         //CORAL ARM
-    new JoystickButton(m_driverController, MyConstants.kXButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmJog(-0.2), m_coralClawSubsystem));
+    new JoystickButton(m_driverController, MyConstants.kXButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmJog(-0.1), m_coralClawSubsystem));
     new JoystickButton(m_driverController, MyConstants.kXButton).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmJog(0), m_coralClawSubsystem));
-    new JoystickButton(m_driverController, MyConstants.kBButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmJog(0.2), m_coralClawSubsystem));
+    new JoystickButton(m_driverController, MyConstants.kBButton).whileTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmJog(0.1), m_coralClawSubsystem));
     new JoystickButton(m_driverController, MyConstants.kBButton).whileFalse(new RunCommand(() -> m_coralClawSubsystem.c_coralArmJog(0), m_coralClawSubsystem));
 
-    // // MANUAL ELEVATOR
+    // MANUAL ELEVATOR
 
-    //     //D-PAD UP
-    // new POVButton(m_driverController, 0).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0.1), m_elevatorSubsystem));
-    // new POVButton(m_driverController, 0).whileFalse(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0), m_elevatorSubsystem));
+        //D-PAD UP
+    new POVButton(m_driverController, 0).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0.15), m_elevatorSubsystem));
+    new POVButton(m_driverController, 0).whileFalse(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0), m_elevatorSubsystem));
 
-    //     //D-PAD DOWN
-    // new POVButton(m_driverController, 180).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(-0.05), m_elevatorSubsystem));
-    // new POVButton(m_driverController, 180).whileFalse(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0), m_elevatorSubsystem));
-
-
-
-    // // OPERATOR BUTTON BOARD
-
-    //     // ELEVATOR
-    // new JoystickButton(m_operatorBoard, 2).onTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorBarge(), m_elevatorSubsystem));
-    // new JoystickButton(m_operatorBoard, 5).onTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorL4(), m_elevatorSubsystem));
-    // new JoystickButton(m_operatorBoard, 8).onTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorL3(), m_elevatorSubsystem));
-    // new JoystickButton(m_operatorBoard, 11).onTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorDown(), m_elevatorSubsystem));
-
-        // ALGAE CLAW
-    new JoystickButton(m_operatorBoard, 1).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsResting(), m_algaeSubsystem));
-    new JoystickButton(m_operatorBoard, 4).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsHoldResting(), m_algaeSubsystem));
-    new JoystickButton(m_operatorBoard, 7).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsProcessor(), m_algaeSubsystem));
-    new JoystickButton(m_operatorBoard, 10).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsIntake(), m_algaeSubsystem));
-
-        // CORAL CLAW
-    new JoystickButton(m_operatorBoard, 3).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmResting(), m_coralClawSubsystem));
-    new JoystickButton(m_operatorBoard, 6).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmHoldResting(), m_coralClawSubsystem));
-    new JoystickButton(m_operatorBoard, 9).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmTrough(), m_coralClawSubsystem));
-    new JoystickButton(m_operatorBoard, 12).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmGIntake(), m_coralClawSubsystem));
+        //D-PAD DOWN
+    new POVButton(m_driverController, 180).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(-0.15), m_elevatorSubsystem));
+    new POVButton(m_driverController, 180).whileFalse(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0), m_elevatorSubsystem));
 
 
 
-    //BLINKIN COMMANDS
-    new JoystickButton(m_driverController, MyConstants.kBumperL).onTrue(new RunCommand(() -> m_blinkin.c_armsPickup(), m_blinkin));
-    new JoystickButton(m_driverController, MyConstants.kBumperL).onFalse(new RunCommand(() -> m_blinkin.c_lightsNormal(), m_blinkin));
-    new JoystickButton(m_driverController, MyConstants.kBumperR).onTrue(new RunCommand(() -> m_blinkin.c_armsOutput(), m_blinkin));
-    new JoystickButton(m_driverController, MyConstants.kBumperR).onFalse(new RunCommand(() -> m_blinkin.c_lightsNormal(), m_blinkin));
-}   
+    // OPERATOR BUTTON BOARD
 
-  /**
+        // ELEVATOR
+        new JoystickButton(m_operatorBoard, 1).onTrue(new ParallelCommandGroup(
+            m_elevatorSubsystem.c_autoElevatorL4(),
+            m_coralClawSubsystem.c_coralL4()
+        ));
+        new JoystickButton(m_operatorBoard, 4).onTrue(new ParallelCommandGroup(
+            m_elevatorSubsystem.c_autoElevatorL3(),
+            m_coralClawSubsystem.c_coralL2()
+        ));
+        new JoystickButton(m_operatorBoard, 7).onTrue(new ParallelCommandGroup(
+            m_elevatorSubsystem.c_elevatorL2(),
+            m_coralClawSubsystem.c_coralL2()
+        ));
+        new JoystickButton(m_operatorBoard, 10).onTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorDown(), m_elevatorSubsystem));
+    
+            // ALGAE CLAW
+        new JoystickButton(m_operatorBoard, 2).onTrue(new ParallelCommandGroup(
+            m_elevatorSubsystem.c_autoElevatorL4(),
+            m_algaeSubsystem.c_autoAlgaeArmsHoldResting()
+        ));
+        new JoystickButton(m_operatorBoard, 5).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsHoldResting(), m_algaeSubsystem));
+        new JoystickButton(m_operatorBoard, 8).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsProcessor(), m_algaeSubsystem));
+        new JoystickButton(m_operatorBoard, 11).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsIntake(), m_algaeSubsystem));
+    
+            // CORAL CLAW
+        new JoystickButton(m_operatorBoard, 6).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmHoldResting(), m_coralClawSubsystem));
+        new JoystickButton(m_operatorBoard, 9).onTrue(new SequentialCommandGroup(
+            m_elevatorSubsystem.c_elevatorCoralStation(),
+            new WaitCommand(0.75),
+            m_coralClawSubsystem.c_coralArmStation()
+        ));
+        new JoystickButton(m_operatorBoard, 12).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmIntake(), m_coralClawSubsystem));
+
+            
+    
+    
+    
+        //BLINKIN COMMANDS
+        new JoystickButton(m_driverController, MyConstants.kBumperL).onTrue(new RunCommand(() -> m_blinkin.c_armsPickup(), m_blinkin));
+        new JoystickButton(m_driverController, MyConstants.kBumperL).onFalse(new RunCommand(() -> m_blinkin.c_lightsNormal(), m_blinkin));
+        new JoystickButton(m_driverController, MyConstants.kBumperR).onTrue(new RunCommand(() -> m_blinkin.c_armsOutput(), m_blinkin));
+        new JoystickButton(m_driverController, MyConstants.kBumperR).onFalse(new RunCommand(() -> m_blinkin.c_lightsNormal(), m_blinkin));
+    }   
+    
+    /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.ejml.equation.Variable;
+
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -10,13 +12,14 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-private final SparkFlex m_elevatorMotor1 = new SparkFlex(15, MotorType.kBrushless);
+public final SparkFlex m_elevatorMotor1 = new SparkFlex(15, MotorType.kBrushless);
 private final SparkFlex m_elevatorMotor2 = new SparkFlex(16, MotorType.kBrushless);
 private SparkFlexConfig m_elevatorConfig = new SparkFlexConfig();
 
@@ -34,8 +37,8 @@ m_elevatorMotor2.setInverted(true);
     .velocityConversionFactor(45);
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.1, 0, 0.75)
-    .outputRange(-0.2, 0.2);
+    .pid(0.1, 0, 0.85)
+    .outputRange(-0.3, 0.3);
 
     m_elevatorMotor2.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_elevatorMotor1.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -43,7 +46,7 @@ m_elevatorMotor2.setInverted(true);
 
   @Override
   public void periodic() {
-
+    SmartDashboard.putNumber("Elevator Position", m_elevatorMotor1.getEncoder().getPosition());
   }
 
     //ELEVATOR POSITIONING
@@ -51,29 +54,21 @@ m_elevatorMotor2.setInverted(true);
     return new InstantCommand(() -> {
       m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
       m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
-    });
+    }, this);
   }
 
   public Command c_autoElevatorL3() {
     return new InstantCommand(() -> {
-    m_elevatorMotor1.getClosedLoopController().setReference(60, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-60, ControlType.kPosition);
-    });
+    m_elevatorMotor1.getClosedLoopController().setReference(99.5, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-99.5, ControlType.kPosition);
+    }, this);
   }
 
   public Command c_autoElevatorL4() {
     return new InstantCommand(() -> {
-    m_elevatorMotor1.getClosedLoopController().setReference(100, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-100, ControlType.kPosition);
-    });
-  }
-
-  //WILL CHANGE
-  public Command c_autoElevatorBarge() {
-    return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
-    });
+    m_elevatorMotor1.getClosedLoopController().setReference(191, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-191, ControlType.kPosition);
+    }, this);
   }
 
   public void c_elevatorDown() {
@@ -82,19 +77,28 @@ m_elevatorMotor2.setInverted(true);
   }
 
   public void c_elevatorL3() {
-    m_elevatorMotor1.getClosedLoopController().setReference(60, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-60, ControlType.kPosition);
-  }
-
-  public void c_elevatorL4() {
     m_elevatorMotor1.getClosedLoopController().setReference(100, ControlType.kPosition);
     m_elevatorMotor2.getClosedLoopController().setReference(-100, ControlType.kPosition);
   }
-  
-  //WILL CHANGE
-  public void c_elevatorBarge() {
-    m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
+
+  public void c_elevatorL4() {
+    m_elevatorMotor1.getClosedLoopController().setReference(190, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-190, ControlType.kPosition);
+  }
+
+  //3 IN. UP
+  public Command c_elevatorCoralStation() {
+    return new InstantCommand(() -> {
+      m_elevatorMotor1.getClosedLoopController().setReference(37, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-37, ControlType.kPosition);
+    }, this);
+  }
+
+  public Command c_elevatorL2() {
+    return new InstantCommand(() -> {
+      m_elevatorMotor1.getClosedLoopController().setReference(52, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-52, ControlType.kPosition);
+    });
   }
 
   public void c_elevatorJog(double speed) {
