@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
+import frc.robot.Constants.MyConstants;
 
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.config.AlternateEncoderConfig.Type;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -18,11 +13,11 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralClawSubsystem extends SubsystemBase {
@@ -31,6 +26,9 @@ private final SparkFlex m_clawArm = new SparkFlex(Constants.MyConstants.kCoralCl
 private final SparkMax m_clawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
 private SparkMaxConfig m_clawWheelsConfig = new SparkMaxConfig();
 private SparkFlexConfig m_clawConfig = new SparkFlexConfig();
+
+XboxController m_driverController = new XboxController(0);
+
 
 public CoralClawSubsystem() {
 
@@ -43,11 +41,11 @@ public CoralClawSubsystem() {
     .idleMode(IdleMode.kBrake);
     m_clawConfig.encoder
     .positionConversionFactor(1)
-    .velocityConversionFactor(5);
+    .velocityConversionFactor(80);
     m_clawConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pidf(0.15, 0, 0.55, 0.01)
-    .outputRange(-0.2, 0.2);
+    .outputRange(-0.35, 0.35);
 
     m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -71,31 +69,31 @@ public CoralClawSubsystem() {
     }
 
     public Command c_autoCoralArmHoldResting() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(4, ControlType.kPosition), this);
-    }
-
-    public Command c_autoCoralArmIntake() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(17.3, ControlType.kPosition), this);
-    }
-
-    public Command c_coralL2() {
         return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(8.5, ControlType.kPosition), this);
     }
 
+    public Command c_autoCoralArmIntake() {
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(73, ControlType.kPosition), this);
+    }
+
+    public Command c_coralL2() {
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(30, ControlType.kPosition), this);
+    }
+
     public Command c_coralArmStation() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(2, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(7.8, ControlType.kPosition), this);
     }
 
     public Command c_coralL4() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(12.5, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(48, ControlType.kPosition), this);
     }
 
     public void c_coralArmHoldResting() {
-        m_clawArm.getClosedLoopController().setReference(4, ControlType.kPosition);
+        m_clawArm.getClosedLoopController().setReference(8.5, ControlType.kPosition);
     }
 
     public void c_coralArmIntake() {
-        m_clawArm.getClosedLoopController().setReference(17.3, ControlType.kPosition);
+        m_clawArm.getClosedLoopController().setReference(68, ControlType.kPosition);
     }
 
     
@@ -104,6 +102,16 @@ public CoralClawSubsystem() {
     public Command c_coralWheelsRun(double speed) {
         return new InstantCommand(() -> m_clawWheels.set(speed), this);
     }
+
+    // public void c_coralWheelsOutput() {
+    //         if(MyConstants.kTriggerR >= 0.5) {
+    //         m_clawWheels.set(0.4);
+    //         } else if (m_driverController.getRightBumperButtonPressed()){
+    //             m_clawWheels.set(-0.6);
+    //         } else {
+    //             m_clawWheels.set(0);
+    //         }
+    // }
 
 
    

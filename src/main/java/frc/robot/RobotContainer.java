@@ -4,55 +4,36 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.AnalogAccelerometer;
+import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.Constants.MyConstants;
-import frc.robot.commands.CoralStationPickup;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.Blinkin;
+// import frc.robot.subsystems.ConnectorX;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.CoralClawSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import java.io.IOException;
-import java.lang.ModuleLayer.Controller;
-import java.util.List;
-import java.util.concurrent.TimeoutException;
 
-import javax.print.attribute.standard.JobStateReasons;
 
 import org.json.simple.parser.ParseException;
 
-import com.ctre.phoenix6.configs.GyroTrimConfigs;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.util.PathPlannerLogging;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -63,19 +44,18 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 public class RobotContainer {
   
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive;
-  private final Blinkin m_blinkin = new Blinkin();
+  public final DriveSubsystem m_robotDrive;
   public final CoralClawSubsystem m_coralClawSubsystem = new CoralClawSubsystem();
   public final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+//   private final ConnectorX m_connectorX = new ConnectorX();
   private final SendableChooser<Command> autoChooser;
-
-//   private ParallelCommandGroup L2Elevator(m_coralClawSubsystem, m_elevatorSubsystem)
 
   //CONTROLLERS SETUP
   XboxController m_driverController = new XboxController(0);
   // XboxController m_operatorController = new XboxController(1);
   GenericHID m_operatorBoard = new GenericHID(1);
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -84,8 +64,6 @@ public class RobotContainer {
    */
   public RobotContainer() throws ParseException, IOException{
 
-    
-
     // Configure the button bindings
 
     m_robotDrive = new DriveSubsystem();
@@ -93,37 +71,40 @@ public class RobotContainer {
     //AUTONOMOUS COMMANDS
 
         //CORAL COMMANDS
-    // NamedCommands.registerCommand("CoralOutput", m_coralClawSubsystem.c_coralWheelsRun(0.5));
-    // NamedCommands.registerCommand("CoralPickup", m_coralClawSubsystem.c_coralWheelsRun(-0.5));
-    // NamedCommands.registerCommand("StopCoralWheels", m_coralClawSubsystem.c_coralWheelsRun(0));
-    // NamedCommands.registerCommand("CoralResting", m_coralClawSubsystem.c_autoCoralArmResting());
-    // NamedCommands.registerCommand("CoralHoldResting", m_coralClawSubsystem.c_autoCoralArmHoldResting());
-    // NamedCommands.registerCommand("CoralTrough", m_coralClawSubsystem.c_autoCoralArmTrough());
-    // NamedCommands.registerCommand("CoralIntake", m_coralClawSubsystem.c_autoCoralArmIntake());
+    NamedCommands.registerCommand("CoralOutput", m_coralClawSubsystem.c_coralWheelsRun(0.4));
+    NamedCommands.registerCommand("CoralPickup", m_coralClawSubsystem.c_coralWheelsRun(-0.5));
+    NamedCommands.registerCommand("StopCoralWheels", m_coralClawSubsystem.c_coralWheelsRun(0));
+    NamedCommands.registerCommand("CoralResting", m_coralClawSubsystem.c_coralArmResting());
+    NamedCommands.registerCommand("CoralHoldResting", m_coralClawSubsystem.c_autoCoralArmHoldResting());
+    NamedCommands.registerCommand("CoralTrough", m_coralClawSubsystem.c_coralL2());
+    NamedCommands.registerCommand("CoralStationPickup", m_coralClawSubsystem.c_coralArmStation());
+    NamedCommands.registerCommand("CoralIntake", m_coralClawSubsystem.c_autoCoralArmIntake());
     
-    //     //ALGAE COMMANDS
-    // NamedCommands.registerCommand("AlgaeOutput", m_algaeSubsystem.c_autoAlgaeWheelsRun(0.6));
-    // NamedCommands.registerCommand("AlgaePickup", m_algaeSubsystem.c_autoAlgaeWheelsRun(-0.8));
-    // NamedCommands.registerCommand("StopAlgaeWheels", m_algaeSubsystem.c_autoAlgaeWheelsRun(0));
-    // NamedCommands.registerCommand("AlgaeResting", m_algaeSubsystem.c_autoAlgaeArmsResting());
-    // NamedCommands.registerCommand("AlgaeHoldResting", m_algaeSubsystem.c_autoAlgaeArmsHoldResting());
-    // NamedCommands.registerCommand("AlgaeProcessor", m_algaeSubsystem.c_autoAlgaeArmsProcessor());
-    // NamedCommands.registerCommand("AlgaeIntake", m_algaeSubsystem.c_autoAlgaeArmsIntake());
+        //ALGAE COMMANDS
+    NamedCommands.registerCommand("AlgaeOutput", m_algaeSubsystem.c_algaeWheelsRun(0.4));
+    NamedCommands.registerCommand("AlgaePickup", m_algaeSubsystem.c_algaeWheelsRun(-0.8));
+    NamedCommands.registerCommand("StopAlgaeWheels", m_algaeSubsystem.c_algaeWheelsRun(0));
+    NamedCommands.registerCommand("AlgaeResting", m_algaeSubsystem.c_algaeArmsResting());
+    NamedCommands.registerCommand("AlgaeHoldResting", m_algaeSubsystem.c_autoAlgaeArmsHoldResting());
+    NamedCommands.registerCommand("AlgaeProcessor", m_algaeSubsystem.c_autoAlgaeArmsProcessor());
+    NamedCommands.registerCommand("AlgaeIntake", m_algaeSubsystem.c_autoAlgaeArmsIntake());
 
         //ELEVATOR COMMANDS
     NamedCommands.registerCommand("ElevatorDown", m_elevatorSubsystem.c_autoElevatorDown());
-    NamedCommands.registerCommand("ElevatorLevel3", m_elevatorSubsystem.c_autoElevatorL3());
-    NamedCommands.registerCommand("ElevatorLevel4", m_elevatorSubsystem.c_autoElevatorL4());
+    NamedCommands.registerCommand("ElevatorStation", m_elevatorSubsystem.c_elevatorCoralStation());
+    NamedCommands.registerCommand("ElevatorLevel2", m_elevatorSubsystem.c_elevatorL2());
+    NamedCommands.registerCommand("ElevatorLevel3", m_elevatorSubsystem.c_elevatorL3());
+    NamedCommands.registerCommand("ElevatorLevel4", m_elevatorSubsystem.c_elevatorL4());
 
-        //SOON TO BE CONNECTOR-X/LUMYN LABS COMMANDS
-    NamedCommands.registerCommand("BlinkinPickup", m_blinkin.c_autoBlinkinPickup());
-    NamedCommands.registerCommand("BlinkinOutput", m_blinkin.c_autoBlinkinOutput());
-    NamedCommands.registerCommand("StandardBlinkin", m_blinkin.c_autoBlinkinNormal());
+    //     //SOON TO BE CONNECTOR-X/LUMYN LABS COMMANDS
+    // NamedCommands.registerCommand("BlinkinPickup", m_blinkin.c_autoBlinkinPickup());
+    // NamedCommands.registerCommand("BlinkinOutput", m_blinkin.c_autoBlinkinOutput());
+    // NamedCommands.registerCommand("StandardBlinkin", m_blinkin.c_autoBlinkinNormal());
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser 6175", autoChooser);
 
-
+    
 
     m_robotDrive.setDefaultCommand(
         new RunCommand(
@@ -134,6 +115,10 @@ public class RobotContainer {
                 -MathUtil.applyDeadband((m_driverController.getRightX() * 0.8), Constants.MyConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
+    // m_algaeSubsystem.setDefaultCommand(new RunCommand(() -> m_algaeSubsystem.c_algaeWheelsOutput(), m_algaeSubsystem));
+
+    // m_coralClawSubsystem.setDefaultCommand(new RunCommand(() -> m_coralClawSubsystem.c_coralWheelsOutput(), m_coralClawSubsystem));
 
 
 //DRIVER BUTTONS
@@ -152,35 +137,48 @@ public class RobotContainer {
 
 
 
-    // INTAKE/OUPUT CONTROLS
+    //MANUAL CONTROLS
+
+        // INTAKE/OUPUT CONTROLS
     new JoystickButton(m_driverController, MyConstants.kBumperL).whileTrue(new ParallelCommandGroup(
         m_coralClawSubsystem.c_coralWheelsRun(-0.75),
         m_algaeSubsystem.c_algaeWheelsRun(-0.8)
+        // m_connectorX.c_intakeLights()
         ));
     new JoystickButton(m_driverController, MyConstants.kBumperL).whileFalse(new ParallelCommandGroup(
         m_coralClawSubsystem.c_coralWheelsRun(0),
         m_algaeSubsystem.c_algaeWheelsRun(0)
+        // m_connectorX.c_idleLights()
     ));
 
     new JoystickButton(m_driverController, MyConstants.kBumperR).whileTrue(new ParallelCommandGroup(
         m_coralClawSubsystem.c_coralWheelsRun(0.5),
         m_algaeSubsystem.c_algaeWheelsRun(0.6)
+        // m_connectorX.c_outputLights()
     ));
     new JoystickButton(m_driverController, MyConstants.kBumperR).whileFalse(new ParallelCommandGroup(
         m_coralClawSubsystem.c_coralWheelsRun(0),
         m_algaeSubsystem.c_algaeWheelsRun(0)
+        // m_connectorX.c_idleLights()
     ));
 
 
-
-    //MANUAL CONTROLS
 
         //ALL MANIPULATORS
                                         //LEFT STICK DOWN
     new JoystickButton(m_driverController, 9).onTrue(new ParallelCommandGroup(
         m_elevatorSubsystem.c_autoElevatorDown(),
+        m_coralClawSubsystem.c_autoCoralArmHoldResting(),
+        m_algaeSubsystem.c_autoAlgaeArmsHoldResting()
+        // m_connectorX.c_elevator1Lights()
+    ));
+
+                                        //RIGHT STICK DOWN
+    new JoystickButton(m_driverController, 10).onTrue(new ParallelCommandGroup(
+        m_elevatorSubsystem.c_autoElevatorDown(),
         m_coralClawSubsystem.c_coralArmResting(),
         m_algaeSubsystem.c_algaeArmsResting()
+        // m_connectorX.c_elevator1Lights()
     ));
 
         //ALGAE ARMS
@@ -211,46 +209,46 @@ public class RobotContainer {
 
         // ELEVATOR
         new JoystickButton(m_operatorBoard, 1).onTrue(new ParallelCommandGroup(
-            m_elevatorSubsystem.c_autoElevatorL4(),
+            m_elevatorSubsystem.c_elevatorL4(),
             m_coralClawSubsystem.c_coralL4()
+            // m_connectorX.c_elevator4Lights()
         ));
         new JoystickButton(m_operatorBoard, 4).onTrue(new ParallelCommandGroup(
-            m_elevatorSubsystem.c_autoElevatorL3(),
+            m_elevatorSubsystem.c_elevatorL3(),
             m_coralClawSubsystem.c_coralL2()
+            // m_connectorX.c_elevator3Lights()
         ));
         new JoystickButton(m_operatorBoard, 7).onTrue(new ParallelCommandGroup(
             m_elevatorSubsystem.c_elevatorL2(),
             m_coralClawSubsystem.c_coralL2()
+            // m_connectorX.c_elevator2Lights()
         ));
         new JoystickButton(m_operatorBoard, 10).onTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorDown(), m_elevatorSubsystem));
     
             // ALGAE CLAW
         new JoystickButton(m_operatorBoard, 2).onTrue(new ParallelCommandGroup(
-            m_elevatorSubsystem.c_autoElevatorL4(),
-            m_algaeSubsystem.c_autoAlgaeArmsHoldResting()
+            m_elevatorSubsystem.c_elevatorL4(),
+            m_algaeSubsystem.c_algaeBarge()
+            // m_connectorX.c_elevator4Lights()
         ));
         new JoystickButton(m_operatorBoard, 5).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsHoldResting(), m_algaeSubsystem));
         new JoystickButton(m_operatorBoard, 8).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsProcessor(), m_algaeSubsystem));
         new JoystickButton(m_operatorBoard, 11).onTrue(new RunCommand(() -> m_algaeSubsystem.c_algaeArmsIntake(), m_algaeSubsystem));
     
             // CORAL CLAW
-        new JoystickButton(m_operatorBoard, 6).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmHoldResting(), m_coralClawSubsystem));
-        new JoystickButton(m_operatorBoard, 9).onTrue(new SequentialCommandGroup(
+        new JoystickButton(m_operatorBoard, 3).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmHoldResting(), m_coralClawSubsystem));
+        new JoystickButton(m_operatorBoard, 6).onTrue(new SequentialCommandGroup(
             m_elevatorSubsystem.c_elevatorCoralStation(),
+            // m_connectorX.c_elevator2Lights(),
             new WaitCommand(0.75),
             m_coralClawSubsystem.c_coralArmStation()
         ));
+        new JoystickButton(m_operatorBoard, 9).onTrue(new ParallelCommandGroup(
+            m_coralClawSubsystem.c_coralL2(),
+            m_elevatorSubsystem.c_autoElevatorDown()
+            // m_connectorX.c_elevator1Lights()
+        ));
         new JoystickButton(m_operatorBoard, 12).onTrue(new RunCommand(() -> m_coralClawSubsystem.c_coralArmIntake(), m_coralClawSubsystem));
-
-            
-    
-    
-    
-        //BLINKIN COMMANDS
-        new JoystickButton(m_driverController, MyConstants.kBumperL).onTrue(new RunCommand(() -> m_blinkin.c_armsPickup(), m_blinkin));
-        new JoystickButton(m_driverController, MyConstants.kBumperL).onFalse(new RunCommand(() -> m_blinkin.c_lightsNormal(), m_blinkin));
-        new JoystickButton(m_driverController, MyConstants.kBumperR).onTrue(new RunCommand(() -> m_blinkin.c_armsOutput(), m_blinkin));
-        new JoystickButton(m_driverController, MyConstants.kBumperR).onFalse(new RunCommand(() -> m_blinkin.c_lightsNormal(), m_blinkin));
     }   
     
     /**
@@ -313,3 +311,4 @@ public class RobotContainer {
   //   return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   // }
 }
+

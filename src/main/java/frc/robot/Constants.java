@@ -8,7 +8,6 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -71,9 +70,9 @@ public final class Constants {
     public static final boolean kGyroReversed = true;
 
     //BUTTONS
-    public static final int kTriggerL = 11;
+    public static double kTriggerL;
     public static final int kBumperL = 5;
-    public static final int kTriggerR = 12;
+    public static double kTriggerR;
     public static final int kBumperR = 6;
 
     public static final int kStickDownL = 9;
@@ -83,6 +82,11 @@ public final class Constants {
     public static final int kBButton = 2;
     public static final int kXButton = 3;
     public static final int kYButton = 4;
+
+    public static final int kUpArrow = 0;
+    public static final int kDownArrow = 180;
+    public static final int kLeftArrow = 270;
+    public static final int kRightArrow = 90; 
 
 
     //MODULE CONSTANTS

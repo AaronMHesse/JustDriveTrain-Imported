@@ -1,29 +1,21 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
+import frc.robot.Constants.MyConstants;
 
-import org.ejml.dense.row.misc.RrefGaussJordanRowPivot_DDRM;
-
-import com.ctre.phoenix6.signals.ControlModeValue;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeSubsystem extends SubsystemBase {
@@ -32,6 +24,9 @@ private final SparkMax m_topWheels = new SparkMax(13, MotorType.kBrushless);
 private final SparkMax m_bottomWheels = new SparkMax(14, MotorType.kBrushless);
 private final SparkFlex m_armsMotor = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
 private SparkFlexConfig m_config = new SparkFlexConfig();
+
+XboxController m_driverController = new XboxController(0);
+
 
 public AlgaeSubsystem () {
 
@@ -45,7 +40,7 @@ public AlgaeSubsystem () {
     m_config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.1, 0, 0.75)
-    .outputRange(-0.3, 0.3);
+    .outputRange(-0.5, 0.5);
 
     m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  
 }
@@ -73,6 +68,10 @@ public AlgaeSubsystem () {
 
     public Command c_autoAlgaeArmsHoldResting() {
         return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(30, ControlType.kPosition), this);
+    }
+
+    public Command c_algaeBarge() {
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(5, ControlType.kPosition), this);
     }
 
     public Command c_autoAlgaeArmsProcessor() {
@@ -104,6 +103,19 @@ public AlgaeSubsystem () {
             m_bottomWheels.set(-speed);
         });
     }
+
+    // public void c_algaeWheelsOutput() {
+    //         if (MyConstants.kTriggerL >= 0.5) {
+    //         m_topWheels.set(0.45);
+    //         m_bottomWheels.set(-0.45);
+    //         } else if (m_driverController.getLeftBumperButtonPressed()){
+    //             m_topWheels.set(-0.8);
+    //             m_bottomWheels.set(0.8);
+    //         } else {
+    //             m_topWheels.set(0);
+    //             m_bottomWheels.set(0);
+    //         }
+    // }
 
 
 
