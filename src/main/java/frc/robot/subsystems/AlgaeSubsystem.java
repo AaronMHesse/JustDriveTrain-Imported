@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
-import frc.robot.Constants.MyConstants;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
@@ -40,7 +39,7 @@ public AlgaeSubsystem () {
     m_config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.1, 0, 0.75)
-    .outputRange(-0.5, 0.5);
+    .outputRange(-0.6, 0.6);
 
     m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  
 }
@@ -104,18 +103,15 @@ public AlgaeSubsystem () {
         });
     }
 
-    // public void c_algaeWheelsOutput() {
-    //         if (MyConstants.kTriggerL >= 0.5) {
-    //         m_topWheels.set(0.45);
-    //         m_bottomWheels.set(-0.45);
-    //         } else if (m_driverController.getLeftBumperButtonPressed()){
-    //             m_topWheels.set(-0.8);
-    //             m_bottomWheels.set(0.8);
-    //         } else {
-    //             m_topWheels.set(0);
-    //             m_bottomWheels.set(0);
-    //         }
-    // }
+    public void c_algaeWheelsOutput(double axis, double speed) {
+            if (axis >= 0.5) {
+            m_topWheels.set(speed);
+            m_bottomWheels.set(-speed);
+            } else {
+                m_topWheels.set(speed * 0);
+                m_bottomWheels.set(speed * 0);
+            }
+    }
 
 
 

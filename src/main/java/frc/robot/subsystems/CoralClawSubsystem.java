@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
-import frc.robot.Constants.MyConstants;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -14,7 +13,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -45,7 +43,7 @@ public CoralClawSubsystem() {
     m_clawConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pidf(0.15, 0, 0.55, 0.01)
-    .outputRange(-0.35, 0.35);
+    .outputRange(-0.4, 0.4);
 
     m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -103,15 +101,13 @@ public CoralClawSubsystem() {
         return new InstantCommand(() -> m_clawWheels.set(speed), this);
     }
 
-    // public void c_coralWheelsOutput() {
-    //         if(MyConstants.kTriggerR >= 0.5) {
-    //         m_clawWheels.set(0.4);
-    //         } else if (m_driverController.getRightBumperButtonPressed()){
-    //             m_clawWheels.set(-0.6);
-    //         } else {
-    //             m_clawWheels.set(0);
-    //         }
-    // }
+    public void c_coralWheelsOutput(double axis, double speed) {
+            if (axis >= 0.5) {
+            m_clawWheels.set(speed);
+            } else {
+                m_clawWheels.set(speed * 0);
+            }
+    }
 
 
    
@@ -119,6 +115,6 @@ public CoralClawSubsystem() {
     public Command c_resetCoralEncoder() {
         return new InstantCommand(() -> {
         m_clawArm.getEncoder().setPosition(0);
-        });
+        }, this);
     }
 }

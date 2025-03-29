@@ -55,8 +55,8 @@ public boolean elevatorTooTall;
 
   public Command c_elevatorL3() {
     return new InstantCommand(() -> {
-    m_elevatorMotor1.getClosedLoopController().setReference(98, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-98, ControlType.kPosition);
+    m_elevatorMotor1.getClosedLoopController().setReference(84, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-84, ControlType.kPosition);
     elevatorTooTall = true;
     }, this);
   }
@@ -85,9 +85,9 @@ public boolean elevatorTooTall;
 
   public Command c_elevatorL2() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(52, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-52, ControlType.kPosition);
-    });
+      m_elevatorMotor1.getClosedLoopController().setReference(42.3, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-42.3, ControlType.kPosition);
+    }, this);
   }
 
   public void c_elevatorJog(double speed) {
