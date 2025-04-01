@@ -124,29 +124,29 @@ public final class Constants {
 
 
     //PATHPLANNER CONFIG
-    public static final Translation2d[] moduleTranslations = 
-    new Translation2d[] {
-      new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(14)),
-      new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(-14)),
-      new Translation2d(Units.inchesToMeters(-14), Units.inchesToMeters(14)),
-      new Translation2d(Units.inchesToMeters(-14), Units.inchesToMeters(-14))
-      };
+    // public static final Translation2d[] moduleTranslations = 
+    // new Translation2d[] {
+    //   new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(14)),
+    //   new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(-14)),
+    //   new Translation2d(Units.inchesToMeters(-14), Units.inchesToMeters(14)),
+    //   new Translation2d(Units.inchesToMeters(-14), Units.inchesToMeters(-14))
+    //   };
 
-    public static final double robotMassKg = 74.088;
-    public static final double robotMOI = 6.883;
-    public static final double wheelCOF = 1.2;
-    public static final RobotConfig config =
-      new RobotConfig(
-          robotMassKg,
-          robotMOI,
-          new ModuleConfig(
-              kWheelRadiusMeters,
-              kMaxSpeedMetersPerSecond,
-              wheelCOF,
-              driveGearbox.withReduction(kDrivingMotorReduction),
-              driveMotorCurrentLimit,
-              1),
-          moduleTranslations);
+    // public static final double robotMassKg = 74.088;
+    // public static final double robotMOI = 6.883;
+    // public static final double wheelCOF = 1.2;
+    // public static final RobotConfig config =
+    //   new RobotConfig(
+    //       robotMassKg,
+    //       robotMOI,
+    //       new ModuleConfig(
+    //           kWheelRadiusMeters,
+    //           kMaxSpeedMetersPerSecond,
+    //           wheelCOF,
+    //           driveGearbox.withReduction(kDrivingMotorReduction),
+    //           driveMotorCurrentLimit,
+    //           1),
+    //       moduleTranslations);
 
   //CORAL CLAW MOTORS
   public static final int kCoralClawArm = 10;

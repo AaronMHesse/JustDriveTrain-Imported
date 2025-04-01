@@ -100,7 +100,7 @@ public AlgaeSubsystem () {
         return new InstantCommand(() -> {
             m_topWheels.set(speed);
             m_bottomWheels.set(-speed);
-        });
+        }, this);
     }
 
     public void c_algaeWheelsOutput(double axis, double speed) {

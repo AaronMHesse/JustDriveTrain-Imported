@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -20,6 +21,7 @@ public final SparkFlex m_elevatorMotor1 = new SparkFlex(15, MotorType.kBrushless
 private final SparkFlex m_elevatorMotor2 = new SparkFlex(16, MotorType.kBrushless);
 private SparkFlexConfig m_elevatorConfig = new SparkFlexConfig();
 public boolean elevatorTooTall;
+public static double elevatorPosition;
 
   public ElevatorSubsystem() {
 
@@ -33,7 +35,12 @@ public boolean elevatorTooTall;
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.2, 0, 0.25)
-    .outputRange(-0.5, 0.5);
+    .outputRange(-0.7, 0.7);
+
+    m_elevatorConfig.closedLoop
+    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    .pid(0.2, 0, 0.25, ClosedLoopSlot.kSlot1)
+    .outputRange(-0.6, 0.6, ClosedLoopSlot.kSlot1);
 
     m_elevatorMotor2.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_elevatorMotor1.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -42,6 +49,7 @@ public boolean elevatorTooTall;
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Elevator Position", m_elevatorMotor1.getEncoder().getPosition());
+    // elevatorPosition = m_elevatorMotor1.getEncoder().getPosition();
   }
 
     //ELEVATOR POSITIONING
@@ -55,16 +63,16 @@ public boolean elevatorTooTall;
 
   public Command c_elevatorL3() {
     return new InstantCommand(() -> {
-    m_elevatorMotor1.getClosedLoopController().setReference(84, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-84, ControlType.kPosition);
+    m_elevatorMotor1.getClosedLoopController().setReference(90, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    m_elevatorMotor2.getClosedLoopController().setReference(-90, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     elevatorTooTall = true;
     }, this);
   }
 
   public Command c_elevatorL4() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(191, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-191, ControlType.kPosition);
+      m_elevatorMotor1.getClosedLoopController().setReference(195, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-195, ControlType.kPosition);
       elevatorTooTall = true;
     }, this);
   }
@@ -78,15 +86,15 @@ public boolean elevatorTooTall;
   //3 IN. UP
   public Command c_elevatorCoralStation() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(37, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-37, ControlType.kPosition);
+      m_elevatorMotor1.getClosedLoopController().setReference(33, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-33, ControlType.kPosition);
     }, this);
   }
 
   public Command c_elevatorL2() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(42.3, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-42.3, ControlType.kPosition);
+      m_elevatorMotor1.getClosedLoopController().setReference(48.3, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_elevatorMotor2.getClosedLoopController().setReference(-48.3, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this);
   }
 

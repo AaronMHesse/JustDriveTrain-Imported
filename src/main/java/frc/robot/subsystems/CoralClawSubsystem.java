@@ -79,7 +79,7 @@ public CoralClawSubsystem() {
     }
 
     public Command c_coralArmStation() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(7.8, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(5.5, ControlType.kPosition), this);
     }
 
     public Command c_coralL4() {
@@ -91,7 +91,7 @@ public CoralClawSubsystem() {
     }
 
     public void c_coralArmIntake() {
-        m_clawArm.getClosedLoopController().setReference(68, ControlType.kPosition);
+        m_clawArm.getClosedLoopController().setReference(68.5, ControlType.kPosition);
     }
 
     
