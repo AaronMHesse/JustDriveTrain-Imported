@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -46,7 +47,7 @@ public AlgaeSubsystem () {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getAbsoluteEncoder().getPosition());
     }
 
 
@@ -118,7 +119,7 @@ public AlgaeSubsystem () {
     //RESET METHOD
     public Command c_resetAlgaeEncoder() {
         return new InstantCommand(() -> {
-        m_armsMotor.getEncoder().setPosition(0);
+            m_armsMotor.getEncoder().setPosition(0);
         });
     }
 }

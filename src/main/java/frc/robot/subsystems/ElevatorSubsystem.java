@@ -28,19 +28,20 @@ public static double elevatorPosition;
     //PID SETUP
     m_elevatorConfig
     .inverted(true)
-    .idleMode(IdleMode.kBrake);
+    .idleMode(IdleMode.kBrake)
+    .closedLoopRampRate(1);
     m_elevatorConfig.encoder
     .positionConversionFactor(1)
     .velocityConversionFactor(45);
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.2, 0, 0.25)
-    .outputRange(-0.7, 0.7);
+    .pid(0.025, 0, 0.5)
+    .outputRange(-0.8, 0.8);
 
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.2, 0, 0.25, ClosedLoopSlot.kSlot1)
-    .outputRange(-0.6, 0.6, ClosedLoopSlot.kSlot1);
+    .pid(0.025, 0, 0.5, ClosedLoopSlot.kSlot1)
+    .outputRange(-0.8, 0.8, ClosedLoopSlot.kSlot1);
 
     m_elevatorMotor2.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_elevatorMotor1.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -83,7 +84,6 @@ public static double elevatorPosition;
     elevatorTooTall = false;
   }
 
-  //3 IN. UP
   public Command c_elevatorCoralStation() {
     return new InstantCommand(() -> {
       m_elevatorMotor1.getClosedLoopController().setReference(33, ControlType.kPosition);
@@ -93,8 +93,8 @@ public static double elevatorPosition;
 
   public Command c_elevatorL2() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(48.3, ControlType.kPosition, ClosedLoopSlot.kSlot1);
-      m_elevatorMotor2.getClosedLoopController().setReference(-48.3, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_elevatorMotor1.getClosedLoopController().setReference(43, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_elevatorMotor2.getClosedLoopController().setReference(-43, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this);
   }
 
