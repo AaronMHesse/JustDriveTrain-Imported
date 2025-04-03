@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;

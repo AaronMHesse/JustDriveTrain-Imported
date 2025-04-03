@@ -29,14 +29,14 @@ public static double elevatorPosition;
     m_elevatorConfig
     .inverted(true)
     .idleMode(IdleMode.kBrake)
-    .closedLoopRampRate(1);
+    .closedLoopRampRate(0.5);
     m_elevatorConfig.encoder
     .positionConversionFactor(1)
     .velocityConversionFactor(45);
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.025, 0, 0.5)
-    .outputRange(-0.8, 0.8);
+    .outputRange(-1, 1);
 
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -64,8 +64,8 @@ public static double elevatorPosition;
 
   public Command c_elevatorL3() {
     return new InstantCommand(() -> {
-    m_elevatorMotor1.getClosedLoopController().setReference(90, ControlType.kPosition, ClosedLoopSlot.kSlot1);
-    m_elevatorMotor2.getClosedLoopController().setReference(-90, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    m_elevatorMotor1.getClosedLoopController().setReference(90, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-90, ControlType.kPosition);
     elevatorTooTall = true;
     }, this);
   }
@@ -93,8 +93,8 @@ public static double elevatorPosition;
 
   public Command c_elevatorL2() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(43, ControlType.kPosition, ClosedLoopSlot.kSlot1);
-      m_elevatorMotor2.getClosedLoopController().setReference(-43, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_elevatorMotor1.getClosedLoopController().setReference(43, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-43, ControlType.kPosition);
     }, this);
   }
 

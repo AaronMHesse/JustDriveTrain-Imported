@@ -25,7 +25,7 @@
 // XboxController m_driverController = new XboxController(0);
 
 //   public ConnectorX() {
-//     cXAnimate.Connect(Port.kUSB1);
+//     cXAnimate.Connect(Port.kUSB);
 //   }
 
 // //PICKUP <|> OUPUT LIGHTS
@@ -68,29 +68,29 @@
 
 // public Command c_lightEmUpL1() {
 //   return new InstantCommand(() -> {
-//     cXAnimate.leds.SetAnimation("L1 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L1 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L1 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L1 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 
 // public Command c_lightEmUpL2() {
 //   return new InstantCommand(() -> {
-//     cXAnimate.leds.SetAnimation("L2 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L2 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L2 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L2 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 
 // public Command c_lightEmUpL3() {
 //   return new InstantCommand(() -> {
-//     cXAnimate.leds.SetAnimation("L3 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L3 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L3 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L3 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 
 // public Command c_lightEmUpL4() {
 //   return new InstantCommand(() -> {
-//     cXAnimate.leds.SetAnimation("L4 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L4 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L4 (1)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L4 (2)", Animation.GrowingBreathe, new Color(50, 255, 0), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 
@@ -100,65 +100,65 @@
 
 // public Command c_elevator1Lights() {
 //   return new InstantCommand(() -> {
-//       cXAnimate.leds.SetAnimation("L1 (1)", Animation.GrowingBreathe, new Color(18, 0, 172), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L1 (2)", Animation.GrowingBreathe, new Color(18, 0, 172), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L1 (1)", Animation.Fill, new Color(18, 0, 172), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L1 (2)", Animation.Fill, new Color(18, 0, 172), Units.Milliseconds.of(0), false, true);
   
-//       cXAnimate.leds.SetAnimation("L2 (1)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L2 (2)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L2 (1)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L2 (2)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
   
-//       cXAnimate.leds.SetAnimation("L3 (1)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L3 (2)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L3 (1)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L3 (2)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
   
-//       cXAnimate.leds.SetAnimation("L4 (1)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L4 (2)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L4 (1)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L4 (2)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 
 // public Command c_elevator2Lights() {
 //   return new InstantCommand(() -> {
-//     cXAnimate.leds.SetAnimation("L1 (1)", Animation.FadeIn, new Color(209, 156, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L1 (2)", Animation.FadeIn, new Color(209, 156, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L1 (1)", Animation.Fill, new Color(209, 156, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L1 (2)", Animation.Fill, new Color(209, 156, 0), Units.Milliseconds.of(0), false, true);
 
-//     cXAnimate.leds.SetAnimation("L2 (1)", Animation.GrowingBreathe, new Color(209, 156, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L2 (2)", Animation.GrowingBreathe, new Color(209, 156, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L2 (1)", Animation.Fill, new Color(209, 156, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L2 (2)", Animation.Fill, new Color(209, 156, 0), Units.Milliseconds.of(0), false, true);
 
-//     cXAnimate.leds.SetAnimation("L3 (1)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L3 (2)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L3 (1)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L3 (2)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
 
-//     cXAnimate.leds.SetAnimation("L4 (1)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L4 (2)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L4 (1)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L4 (2)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 
 // public Command c_elevator3Lights() {
 //   return new InstantCommand(() -> {
-//       cXAnimate.leds.SetAnimation("L1 (1)", Animation.FadeIn, new Color(143, 0, 163), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L1 (2)", Animation.FadeIn, new Color(143, 0, 163), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L1 (1)", Animation.Fill, new Color(143, 0, 163), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L1 (2)", Animation.Fill, new Color(143, 0, 163), Units.Milliseconds.of(0), false, true);
   
-//       cXAnimate.leds.SetAnimation("L2 (1)", Animation.FadeIn, new Color(143, 0, 163), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L2 (2)", Animation.FadeIn, new Color(143, 0, 163), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L2 (1)", Animation.Fill, new Color(143, 0, 163), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L2 (2)", Animation.Fill, new Color(143, 0, 163), Units.Milliseconds.of(0), false, true);
   
-//       cXAnimate.leds.SetAnimation("L3 (1)", Animation.GrowingBreathe, new Color(143, 0, 163), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L3 (2)", Animation.GrowingBreathe, new Color(143, 0, 163), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L3 (1)", Animation.Fill, new Color(143, 0, 163), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L3 (2)", Animation.Fill, new Color(143, 0, 163), Units.Milliseconds.of(0), false, true);
   
-//       cXAnimate.leds.SetAnimation("L4 (1)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
-//       cXAnimate.leds.SetAnimation("L4 (2)", Animation.FadeOut, new Color(0, 0, 0), Units.Milliseconds.of(1), false, true);
+//       cXAnimate.leds.SetAnimation("L4 (1)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
+//       cXAnimate.leds.SetAnimation("L4 (2)", Animation.Fill, new Color(0, 0, 0), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 
 // public Command c_elevator4Lights() {
 //   return new InstantCommand(() -> {
-//     cXAnimate.leds.SetAnimation("L1 (1)", Animation.FadeIn, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L1 (2)", Animation.FadeIn, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L1 (1)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L1 (2)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
 
-//     cXAnimate.leds.SetAnimation("L2 (1)", Animation.FadeIn, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L2 (2)", Animation.FadeIn, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L2 (1)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L2 (2)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
 
-//     cXAnimate.leds.SetAnimation("L3 (1)", Animation.FadeIn, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L3 (2)", Animation.FadeIn, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L3 (1)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L3 (2)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
 
-//     cXAnimate.leds.SetAnimation("L4 (1)", Animation.GrowingBreathe, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
-//     cXAnimate.leds.SetAnimation("L4 (2)", Animation.GrowingBreathe, new Color(0, 0, 169), Units.Milliseconds.of(1), false, true);
+//     cXAnimate.leds.SetAnimation("L4 (1)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
+//     cXAnimate.leds.SetAnimation("L4 (2)", Animation.Fill, new Color(0, 0, 169), Units.Milliseconds.of(0), false, true);
 //   }, this);
 // }
 

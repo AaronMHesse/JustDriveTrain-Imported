@@ -71,7 +71,7 @@ public CoralClawSubsystem() {
     }
 
     public Command c_autoCoralArmIntake() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(73, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(68.5, ControlType.kPosition), this);
     }
 
     public Command c_coralL2() {
