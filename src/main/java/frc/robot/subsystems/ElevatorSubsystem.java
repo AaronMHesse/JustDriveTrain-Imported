@@ -29,13 +29,13 @@ public static double elevatorPosition;
     m_elevatorConfig
     .inverted(true)
     .idleMode(IdleMode.kBrake)
-    .closedLoopRampRate(0.5);
+    .closedLoopRampRate(0.15);
     m_elevatorConfig.encoder
     .positionConversionFactor(1)
     .velocityConversionFactor(45);
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.025, 0, 0.5)
+    .pid(0.0275, 0, 0.5)
     .outputRange(-1, 1);
 
     m_elevatorConfig.closedLoop

@@ -17,17 +17,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class AlgaeSubsystem extends SubsystemBase {
+public class AlgaeArms extends SubsystemBase {
 
-private final SparkMax m_topWheels = new SparkMax(13, MotorType.kBrushless);
-private final SparkMax m_bottomWheels = new SparkMax(14, MotorType.kBrushless);
+// private final SparkMax m_topWheels = new SparkMax(13, MotorType.kBrushless);
+// private final SparkMax m_bottomWheels = new SparkMax(14, MotorType.kBrushless);
 private final SparkFlex m_armsMotor = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
 private SparkFlexConfig m_config = new SparkFlexConfig();
 
 XboxController m_driverController = new XboxController(0);
 
 
-public AlgaeSubsystem () {
+public AlgaeArms () {
 
     //PID SETUP
     m_config
@@ -95,23 +95,23 @@ public AlgaeSubsystem () {
  
 
 
-    // ALGAE WHEELS//
-    public Command c_algaeWheelsRun(double speed) {
-        return new InstantCommand(() -> {
-            m_topWheels.set(speed);
-            m_bottomWheels.set(-speed);
-        }, this);
-    }
+    // // ALGAE WHEELS//
+    // public Command c_algaeWheelsRun(double speed) {
+    //     return new InstantCommand(() -> {
+    //         m_topWheels.set(speed);
+    //         m_bottomWheels.set(-speed);
+    //     }, this);
+    // }
 
-    public void c_algaeWheelsOutput(double axis, double speed) {
-            if (axis >= 0.5) {
-            m_topWheels.set(speed);
-            m_bottomWheels.set(-speed);
-            } else {
-                m_topWheels.set(speed * 0);
-                m_bottomWheels.set(speed * 0);
-            }
-    }
+    // public void c_algaeWheelsOutput(double axis, double speed) {
+    //         if (axis >= 0.5) {
+    //         m_topWheels.set(speed);
+    //         m_bottomWheels.set(-speed);
+    //         } else {
+    //             m_topWheels.set(speed * 0);
+    //             m_bottomWheels.set(speed * 0);
+    //         }
+    // }
 
 
 
@@ -119,6 +119,6 @@ public AlgaeSubsystem () {
     public Command c_resetAlgaeEncoder() {
         return new InstantCommand(() -> {
             m_armsMotor.getEncoder().setPosition(0);
-        });
+        }, this);
     }
 }

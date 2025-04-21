@@ -80,7 +80,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.2
+            "waitTime": 3.0
           }
         },
         {
@@ -108,13 +108,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorLevel3"
+                  "name": "ElevatorLevel4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "CoralTrough"
+                  "name": "CoralL4"
                 }
               }
             ]
@@ -129,7 +129,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.75
           }
         },
         {

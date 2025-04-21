@@ -18,20 +18,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CoralClawSubsystem extends SubsystemBase {
+public class CoralArms extends SubsystemBase {
     
 private final SparkFlex m_clawArm = new SparkFlex(Constants.MyConstants.kCoralClawArm, MotorType.kBrushless);
-private final SparkMax m_clawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
-private SparkMaxConfig m_clawWheelsConfig = new SparkMaxConfig();
+// private final SparkMax m_clawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
+// private SparkMaxConfig m_clawWheelsConfig = new SparkMaxConfig();
 private SparkFlexConfig m_clawConfig = new SparkFlexConfig();
 
 XboxController m_driverController = new XboxController(0);
 
 
-public CoralClawSubsystem() {
+public CoralArms() {
 
-    m_clawWheelsConfig.inverted(true);
-    m_clawWheels.configure(m_clawWheelsConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // m_clawWheelsConfig.inverted(true);
+    // m_clawWheels.configure(m_clawWheelsConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //PID SETUP
     m_clawConfig
@@ -43,7 +43,7 @@ public CoralClawSubsystem() {
     m_clawConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pidf(0.15, 0, 0.55, 0.01)
-    .outputRange(-0.4, 0.4);
+    .outputRange(-0.6, 0.6);
 
     m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -96,18 +96,18 @@ public CoralClawSubsystem() {
 
     
   
-    //CORAL WHEELS
-    public Command c_coralWheelsRun(double speed) {
-        return new InstantCommand(() -> m_clawWheels.set(speed), this);
-    }
+    // // CORAL WHEELS
+    // public Command c_coralWheelsRun(double speed) {
+    //     return new InstantCommand(() -> m_clawWheels.set(speed), this);
+    // }
 
-    public void c_coralWheelsOutput(double axis, double speed) {
-            if (axis >= 0.5) {
-            m_clawWheels.set(speed);
-            } else {
-                m_clawWheels.set(speed * 0);
-            }
-    }
+    // public void c_coralWheelsOutput(double axis, double speed) {
+    //         if (axis >= 0.5) {
+    //         m_clawWheels.set(speed);
+    //         } else {
+    //             m_clawWheels.set(speed * 0);
+    //         }
+    // }
 
 
    
