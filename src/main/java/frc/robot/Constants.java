@@ -86,6 +86,9 @@ public final class Constants {
     public static final int kLeftArrow = 270;
     public static final int kRightArrow = 90; 
 
+    public static double rightButtons;
+    public static double bottomRightButtons;
+
 
     //MODULE CONSTANTS
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,

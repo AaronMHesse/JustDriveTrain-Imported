@@ -3,7 +3,6 @@ import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -19,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeArms extends SubsystemBase {
 
-// private final SparkMax m_topWheels = new SparkMax(13, MotorType.kBrushless);
-// private final SparkMax m_bottomWheels = new SparkMax(14, MotorType.kBrushless);
 private final SparkFlex m_armsMotor = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
 private SparkFlexConfig m_config = new SparkFlexConfig();
 
@@ -92,27 +89,6 @@ public AlgaeArms () {
     public void c_algaeArmsIntake() {
         m_armsMotor.getClosedLoopController().setReference(63, ControlType.kPosition);
     }
- 
-
-
-    // // ALGAE WHEELS//
-    // public Command c_algaeWheelsRun(double speed) {
-    //     return new InstantCommand(() -> {
-    //         m_topWheels.set(speed);
-    //         m_bottomWheels.set(-speed);
-    //     }, this);
-    // }
-
-    // public void c_algaeWheelsOutput(double axis, double speed) {
-    //         if (axis >= 0.5) {
-    //         m_topWheels.set(speed);
-    //         m_bottomWheels.set(-speed);
-    //         } else {
-    //             m_topWheels.set(speed * 0);
-    //             m_bottomWheels.set(speed * 0);
-    //         }
-    // }
-
 
 
     //RESET METHOD

@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -21,17 +19,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CoralArms extends SubsystemBase {
     
 private final SparkFlex m_clawArm = new SparkFlex(Constants.MyConstants.kCoralClawArm, MotorType.kBrushless);
-// private final SparkMax m_clawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
-// private SparkMaxConfig m_clawWheelsConfig = new SparkMaxConfig();
 private SparkFlexConfig m_clawConfig = new SparkFlexConfig();
 
 XboxController m_driverController = new XboxController(0);
 
 
 public CoralArms() {
-
-    // m_clawWheelsConfig.inverted(true);
-    // m_clawWheels.configure(m_clawWheelsConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //PID SETUP
     m_clawConfig
@@ -54,8 +47,6 @@ public CoralArms() {
     }
 
     
-    //CORAL ARM
-
     public void c_coralArmJog(double speed) {
         m_clawArm.set(-speed);
     }
@@ -93,21 +84,6 @@ public CoralArms() {
     public void c_coralArmIntake() {
         m_clawArm.getClosedLoopController().setReference(68.5, ControlType.kPosition);
     }
-
-    
-  
-    // // CORAL WHEELS
-    // public Command c_coralWheelsRun(double speed) {
-    //     return new InstantCommand(() -> m_clawWheels.set(speed), this);
-    // }
-
-    // public void c_coralWheelsOutput(double axis, double speed) {
-    //         if (axis >= 0.5) {
-    //         m_clawWheels.set(speed);
-    //         } else {
-    //             m_clawWheels.set(speed * 0);
-    //         }
-    // }
 
 
    

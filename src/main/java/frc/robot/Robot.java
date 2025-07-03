@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 
-
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   XboxController m_driverController = new XboxController(0);
+  GenericHID m_operatorBoard = new GenericHID(1);
 
       //ADDS CAMERA TO SMARTDASHBOARD//
 // public Robot() {
@@ -80,6 +81,11 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
+    double RightButtons = m_operatorBoard.getRawAxis(2);
+    MyConstants.rightButtons = RightButtons;
+
+    double BottomRightButtons = m_operatorBoard.getRawAxis(1);
+    MyConstants.bottomRightButtons = BottomRightButtons;
     
   }
 
