@@ -2,10 +2,13 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
+
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkFlexExternalEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.ExternalEncoderConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -20,6 +23,8 @@ public class AlgaeArms extends SubsystemBase {
 
 private final SparkFlex m_armsMotor = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
 private SparkFlexConfig m_config = new SparkFlexConfig();
+// public SparkFlexExternalEncoder algae_encoder;
+// private ExternalEncoderConfig m_configTest = new ExternalEncoderConfig();
 
 XboxController m_driverController = new XboxController(0);
 
@@ -36,14 +41,14 @@ public AlgaeArms () {
     m_config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.1, 0, 0.75)
-    .outputRange(-0.6, 0.6);
+    .outputRange(-0.2, 0.2);
 
     m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  
 }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getAbsoluteEncoder().getPosition());
+        SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getEncoder().getPosition());
     }
 
 

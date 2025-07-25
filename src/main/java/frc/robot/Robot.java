@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 
@@ -9,13 +5,19 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.MyConstants;
+// import frc.robot.subsystems.ConnectorX;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,16 +30,13 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  // private ConnectorX m_connectorX = new ConnectorX();
 
   XboxController m_driverController = new XboxController(0);
   GenericHID m_operatorBoard = new GenericHID(1);
 
-      //ADDS CAMERA TO SMARTDASHBOARD//
-// public Robot() {
-
-// CameraServer.startAutomaticCapture();
-
-// }
+public Robot() {
+}
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -55,6 +54,12 @@ public class Robot extends TimedRobot {
     } catch (ParseException e) {
       e.printStackTrace();
     }
+
+    // new RunCommand(() -> m_connectorX.c_startup(), m_connectorX);
+
+  // CameraServer.startAutomaticCapture();
+  // Shuffleboard.getTab("Camera")
+  //             .add("Camera Feed", CameraServer.getServer());
   }
 
   /**
@@ -75,6 +80,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Right Trigger", Rtrigger);
     SmartDashboard.putNumber("Left Trigger", Ltrigger);
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
