@@ -23,8 +23,6 @@ public class AlgaeArms extends SubsystemBase {
 
 private final SparkFlex m_armsMotor = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
 private SparkFlexConfig m_config = new SparkFlexConfig();
-// public SparkFlexExternalEncoder algae_encoder;
-// private ExternalEncoderConfig m_configTest = new ExternalEncoderConfig();
 
 XboxController m_driverController = new XboxController(0);
 
@@ -35,20 +33,20 @@ public AlgaeArms () {
     m_config
     .inverted(false)
     .idleMode(IdleMode.kBrake);
-    m_config.encoder
-    .positionConversionFactor(1)
+    m_config.externalEncoder
+    .positionConversionFactor(45)
     .velocityConversionFactor(80);
     m_config.closedLoop
-    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
     .pid(0.1, 0, 0.75)
-    .outputRange(-0.2, 0.2);
+    .outputRange(-0.6, 0.6);
 
     m_armsMotor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  
 }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getExternalEncoder().getPosition());
     }
 
 
@@ -99,7 +97,7 @@ public AlgaeArms () {
     //RESET METHOD
     public Command c_resetAlgaeEncoder() {
         return new InstantCommand(() -> {
-            m_armsMotor.getEncoder().setPosition(0);
+            m_armsMotor.getExternalEncoder().setPosition(0);
         }, this);
     }
 }
