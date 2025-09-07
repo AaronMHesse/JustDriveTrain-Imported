@@ -36,7 +36,7 @@ public CoralArms() {
     m_clawConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
     .pid(0.15, 0, 0.55)
-    .outputRange(-0.2, 0.2);
+    .outputRange(-0.6, 0.6);
 
     m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
@@ -62,7 +62,7 @@ public CoralArms() {
     }
 
     public Command c_autoCoralArmIntake() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-87.5, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-86.5, ControlType.kPosition), this);
     }
 
     public Command c_coralL2() {
@@ -74,7 +74,7 @@ public CoralArms() {
     }
 
     public Command c_coralL4() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-48, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-75, ControlType.kPosition), this);
     }
 
     public void c_coralArmHoldResting() {
