@@ -47,7 +47,7 @@ public CoralArms() {
     }
 
     
-    public void c_coralArmJog(double speed) {
+    public void v_coralArmJog(double speed) {
         m_clawArm.set(-speed);
     }
 
@@ -77,11 +77,11 @@ public CoralArms() {
         return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-75, ControlType.kPosition), this);
     }
 
-    public void c_coralArmHoldResting() {
+    public void v_coralArmHoldResting() {
         m_clawArm.getClosedLoopController().setReference(-18, ControlType.kPosition);
     }
 
-    public void c_coralArmIntake() {
+    public void v_coralArmIntake() {
         m_clawArm.getClosedLoopController().setReference(-144, ControlType.kPosition);
     }
 

@@ -49,13 +49,8 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
-    // public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
-    // public static final double kFrontRightChassisAngularOffset = -Math.PI;
-    // public static final double kBackLeftChassisAngularOffset = Math.PI;
-    // public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 18;
+    public static final int kFrontLeftDrivingCanId = 3;
     public static final int kRearLeftDrivingCanId = 4;
     public static final int kFrontRightDrivingCanId = 2;
     public static final int kRearRightDrivingCanId = 1;
@@ -123,35 +118,9 @@ public final class Constants {
     public static final int kDrivingMotorCurrentLimit = 50;
     public static final int kTurningMotorCurrentLimit = 20;
 
-
-    //PATHPLANNER CONFIG
-    // public static final Translation2d[] moduleTranslations = 
-    // new Translation2d[] {
-    //   new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(14)),
-    //   new Translation2d(Units.inchesToMeters(14), Units.inchesToMeters(-14)),
-    //   new Translation2d(Units.inchesToMeters(-14), Units.inchesToMeters(14)),
-    //   new Translation2d(Units.inchesToMeters(-14), Units.inchesToMeters(-14))
-    //   };
-
-    // public static final double robotMassKg = 74.088;
-    // public static final double robotMOI = 6.883;
-    // public static final double wheelCOF = 1.2;
-    // public static final RobotConfig config =
-    //   new RobotConfig(
-    //       robotMassKg,
-    //       robotMOI,
-    //       new ModuleConfig(
-    //           kWheelRadiusMeters,
-    //           kMaxSpeedMetersPerSecond,
-    //           wheelCOF,
-    //           driveGearbox.withReduction(kDrivingMotorReduction),
-    //           driveMotorCurrentLimit,
-    //           1),
-    //       moduleTranslations);
-
   //CORAL CLAW MOTORS
   public static final int kCoralClawArm = 10;
-  public static final int kCoralClawWheels = 11;
+  public static final int kCoralClawWheel = 11;
 
   //ALGAE MOTORS
   public static final int kAlgaeArm = 12;

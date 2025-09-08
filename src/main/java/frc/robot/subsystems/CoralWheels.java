@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -9,38 +5,66 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class CoralWheels extends SubsystemBase {
 
-private final SparkMax m_clawWheels = new SparkMax(Constants.MyConstants.kCoralClawWheels, MotorType.kBrushless);
-private SparkMaxConfig m_clawWheelsConfig = new SparkMaxConfig();
+private final SparkMax m_topWheels = new SparkMax(11, MotorType.kBrushless);
+private final SparkMax m_bottomWheels = new SparkMax(17, MotorType.kBrushless);
+private final SparkMax m_insideWheel = new SparkMax(19, MotorType.kBrushless);
+private SparkMaxConfig m_wheelConfig = new SparkMaxConfig();
 
   public CoralWheels() {
-    m_clawWheelsConfig.inverted(true);
-    m_clawWheels.configure(m_clawWheelsConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_wheelConfig
+    .inverted(false)
+    .idleMode(IdleMode.kCoast);
+
+    m_topWheels.configure(m_wheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_bottomWheels.configure(m_wheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_insideWheel.configure(m_wheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-    public Command c_autoCoralWheelsRun(double speed) {
-        return new InstantCommand(() -> m_clawWheels.set(speed), this);
-    }
 
-    public void c_coralWheelsRun(double speed) {
-        m_clawWheels.set(speed);
-    }
+  //COMMANDS
+  public void v_coralIntake() {
+    m_topWheels.set(0.5);
+    m_bottomWheels.set(-0.5);
+  }
 
-    public void c_coralWheelsOutput(double axis, double speed) {
-            if (axis >= 0.5) {
-                m_clawWheels.set(speed);
-                } else {
-                    m_clawWheels.set(speed * 0);
-                }
-
+  public void v_coralOutput(double axis) {
+    if (axis >= 0.5) {
+    if (CoralRotator.IsClaw90Deg == false) {
+      m_topWheels.set(0.3);
+      m_bottomWheels.set(0.3);
+      m_insideWheel.set(0);
+    } else {
+      m_topWheels.set(-0.5);
+      m_bottomWheels.set(0.5);
     }
+  } else {
+    m_topWheels.set(0);
+    m_bottomWheels.set(0);
+  }
+  }
+
+  public Command c_outsideCoralWheelsRun(double speed) {
+    return new InstantCommand(() -> {
+      m_topWheels.set(speed);
+      m_bottomWheels.set(-speed);
+    }, this);
+  }
+
+  public Command c_Coral90DegOutput() {
+    return new InstantCommand(() -> {
+      m_topWheels.set(0.3);
+      m_bottomWheels.set(0.3);
+      m_insideWheel.set(0.5);
+    }, this);
+  }
 
   @Override
   public void periodic() {
