@@ -21,7 +21,7 @@ private SparkMaxConfig m_wheelConfig = new SparkMaxConfig();
   public CoralWheels() {
     m_wheelConfig
     .inverted(false)
-    .idleMode(IdleMode.kCoast);
+    .idleMode(IdleMode.kBrake);
 
     m_topWheels.configure(m_wheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_bottomWheels.configure(m_wheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -31,16 +31,16 @@ private SparkMaxConfig m_wheelConfig = new SparkMaxConfig();
 
   //COMMANDS
   public void v_coralIntake() {
-    m_topWheels.set(0.5);
-    m_bottomWheels.set(-0.5);
+    m_topWheels.set(0.75);
+    m_bottomWheels.set(-0.75);
   }
 
   public void v_coralOutput(double axis) {
     if (axis >= 0.5) {
     if (CoralRotator.IsClaw90Deg == false) {
-      m_topWheels.set(0.3);
-      m_bottomWheels.set(0.3);
-      m_insideWheel.set(0);
+      m_topWheels.set(0.5);
+      m_bottomWheels.set(0.5);
+      m_insideWheel.set(-0.7);
     } else {
       m_topWheels.set(-0.5);
       m_bottomWheels.set(0.5);
@@ -48,6 +48,7 @@ private SparkMaxConfig m_wheelConfig = new SparkMaxConfig();
   } else {
     m_topWheels.set(0);
     m_bottomWheels.set(0);
+    m_insideWheel.set(0);
   }
   }
 
@@ -58,11 +59,11 @@ private SparkMaxConfig m_wheelConfig = new SparkMaxConfig();
     }, this);
   }
 
-  public Command c_Coral90DegOutput() {
+  public Command c_coral90DegOutput() {
     return new InstantCommand(() -> {
-      m_topWheels.set(0.3);
-      m_bottomWheels.set(0.3);
-      m_insideWheel.set(0.5);
+      m_topWheels.set(0.5);
+      m_bottomWheels.set(0.5);
+      m_insideWheel.set(-0.7);
     }, this);
   }
 

@@ -4,11 +4,9 @@ import frc.robot.Constants;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkFlexExternalEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.ExternalEncoderConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -61,36 +59,34 @@ public AlgaeArms () {
 
 
         //POSITIONING
-    public Command c_algaeArmsResting() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(0, ControlType.kPosition), this);
+      public Command c_algaeBarge() {
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(10, ControlType.kPosition), this);
     }
 
-    public Command c_autoAlgaeArmsHoldResting() {
+    public Command c_algaeArmsResting() {
         return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(30, ControlType.kPosition), this);
     }
 
-    public Command c_algaeBarge() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(5, ControlType.kPosition), this);
+    public Command c_algaeArmsProcessor() {
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(56, ControlType.kPosition), this);
     }
 
-    public Command c_autoAlgaeArmsProcessor() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(45, ControlType.kPosition), this);
+    public Command c_algaeArmsIntake() {
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(75, ControlType.kPosition), this);
     }
 
-    public Command c_autoAlgaeArmsIntake() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(63, ControlType.kPosition), this);
-    }
 
-    public void c_algaeArmsHoldResting() {
+    
+    public void v_algaeArmsResting() {
         m_armsMotor.getClosedLoopController().setReference(30, ControlType.kPosition);
     }
 
-    public void c_algaeArmsProcessor() {
-        m_armsMotor.getClosedLoopController().setReference(45, ControlType.kPosition);
+    public void v_algaeArmsProcessor() {
+        m_armsMotor.getClosedLoopController().setReference(56, ControlType.kPosition);
     }
 
-    public void c_algaeArmsIntake() {
-        m_armsMotor.getClosedLoopController().setReference(63, ControlType.kPosition);
+    public void v_algaeArmsIntake() {
+        m_armsMotor.getClosedLoopController().setReference(75, ControlType.kPosition);
     }
 
 

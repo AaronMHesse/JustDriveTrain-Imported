@@ -64,17 +64,24 @@ public static double elevatorPosition;
 
   public Command c_elevatorL3() {
     return new InstantCommand(() -> {
-    m_elevatorMotor1.getClosedLoopController().setReference(90, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-90, ControlType.kPosition);
-    elevatorTooTall = true;
+    m_elevatorMotor1.getClosedLoopController().setReference(73, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(-73, ControlType.kPosition);
+    elevatorTooTall = false;
     }, this);
   }
 
   public Command c_elevatorL4() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(195, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-195, ControlType.kPosition);
+      m_elevatorMotor1.getClosedLoopController().setReference(138, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-138, ControlType.kPosition);
       elevatorTooTall = true;
+    }, this);
+  }
+
+  public Command c_elevatorBarge() {
+    return new InstantCommand(() -> {
+      m_elevatorMotor1.getClosedLoopController().setReference(190, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-190, ControlType.kPosition);
     }, this);
   }
 
@@ -86,15 +93,15 @@ public static double elevatorPosition;
 
   public Command c_elevatorCoralStation() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(33, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-33, ControlType.kPosition);
+      m_elevatorMotor1.getClosedLoopController().setReference(18, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-18, ControlType.kPosition);
     }, this);
   }
 
   public Command c_elevatorL2() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(43, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-43, ControlType.kPosition);
+      m_elevatorMotor1.getClosedLoopController().setReference(32, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-32, ControlType.kPosition);
     }, this);
   }
 

@@ -1,0 +1,217 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BackLeft Trough"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorLevel4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralRotateHome"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "90DegCoralOutput"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopCoralWheels"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralRotateHome"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralResting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left_MoveAndTrough_2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStationPickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralRotate90Deg"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralPickup"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopCoralWheels"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralRotateHome"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralResting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorLevel4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left_MoveAndTrough_3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "90DegCoralOutput"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopCoralWheels"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralResting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL1"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
