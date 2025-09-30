@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BackLeft Trough"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralL2"
+            "pathName": "Right_DoubleL4_1"
           }
         },
         {
@@ -31,13 +25,13 @@
         {
           "type": "named",
           "data": {
-            "name": "CoralRotateHome"
+            "name": "CoralL2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.5
+            "waitTime": 1.25
           }
         },
         {
@@ -61,49 +55,7 @@
         {
           "type": "named",
           "data": {
-            "name": "CoralRotateHome"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "CoralResting"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorDown"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LightsL1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left_MoveAndTrough_2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralStationPickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorStation"
           }
         },
         {
@@ -115,13 +67,25 @@
         {
           "type": "named",
           "data": {
+            "name": "ElevatorStation"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right_DoubleL4_2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "CoralRotate90Deg"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "CoralStationPickup"
           }
         },
         {
@@ -145,13 +109,13 @@
         {
           "type": "named",
           "data": {
-            "name": "CoralRotateHome"
+            "name": "CoralResting"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralResting"
+            "name": "LightsL4"
           }
         },
         {
@@ -161,9 +125,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "CoralRotateHome"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Left_MoveAndTrough_3"
+            "pathName": "Right_DoubleL4_3"
           }
         },
         {
@@ -175,7 +145,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -199,7 +169,7 @@
         {
           "type": "named",
           "data": {
-            "name": "CoralResting"
+            "name": "LightsL1"
           }
         },
         {
@@ -211,7 +181,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LightsL1"
+            "name": "CoralResting"
           }
         }
       ]
