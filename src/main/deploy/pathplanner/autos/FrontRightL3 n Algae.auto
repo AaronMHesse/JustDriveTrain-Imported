@@ -1,0 +1,134 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FrontRightL3_n_Algae_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorLevel3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralReef"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "90DegCoralOutput"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopCoralWheels"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralResting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorLevel2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FrontRightL3_n_Algae_2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaeResting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaePickup"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopAlgaeWheels"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FrontRightL3_n_Algae_3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorDown"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LightsL1"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

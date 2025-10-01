@@ -73,8 +73,7 @@ private final ConnectorX m_connectorX = new ConnectorX();
     NamedCommands.registerCommand("CoralTrough", m_coralArm.c_coralTrough());
     NamedCommands.registerCommand("CoralStationPickup", m_coralArm.c_coralArmStation());
     NamedCommands.registerCommand("CoralIntake", m_coralArm.c_autoCoralArmIntake());
-    NamedCommands.registerCommand("CoralL4", m_coralArm.c_coralL4());
-    NamedCommands.registerCommand("CoralL2", m_coralArm.c_coralL2());
+    NamedCommands.registerCommand("CoralReef", m_coralArm.c_coralReef());
     
         // ALGAE COMMANDS
     NamedCommands.registerCommand("AlgaeOutput", m_algaeWheels.c_autoAlgaeWheelsRun(0.4));
@@ -126,7 +125,6 @@ m_coralWheels.setDefaultCommand(new RunCommand(() -> m_coralWheels.v_coralOutput
    //RESET ENCODERS                         SHARE BUTTON
     new JoystickButton(m_driverController, 7).onTrue(new ParallelCommandGroup(
         m_elevatorSubsystem.c_resetElevatorEncoders(),
-        m_coralArm.c_resetCoralEncoder(),
         m_coralRotator.c_resetRotator()
     ));
 
@@ -186,19 +184,19 @@ m_coralWheels.setDefaultCommand(new RunCommand(() -> m_coralWheels.v_coralOutput
         new JoystickButton(m_operatorBoard, 1).onTrue(new ParallelCommandGroup(
             m_connectorX.c_elevator4Lights(),
             m_elevatorSubsystem.c_elevatorL4(),
-            m_coralArm.c_coralL2(),
+            m_coralArm.c_coralReef(),
             m_coralRotator.c_clawHome()
         ));
         new JoystickButton(m_operatorBoard, 4).onTrue(new ParallelCommandGroup(
             m_connectorX.c_elevator3Lights(),
             m_elevatorSubsystem.c_elevatorL3(),
-            m_coralArm.c_coralL2(),
+            m_coralArm.c_coralReef(),
             m_coralRotator.c_clawHome()
         ));
         new JoystickButton(m_operatorBoard, 7).onTrue(new ParallelCommandGroup(
             m_connectorX.c_elevator2Lights(),
             m_elevatorSubsystem.c_elevatorL2(),
-            m_coralArm.c_coralL2(),
+            m_coralArm.c_coralReef(),
             m_coralRotator.c_clawHome()
         ));
 
