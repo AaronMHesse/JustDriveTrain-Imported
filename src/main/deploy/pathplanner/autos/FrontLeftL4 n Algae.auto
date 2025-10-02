@@ -13,13 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ElevatorLevel3"
+            "name": "ElevatorLevel4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "LightsL3"
+            "name": "LightsL4"
           }
         },
         {
@@ -61,19 +61,19 @@
         {
           "type": "named",
           "data": {
-            "name": "ElevatorLevel2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LightsL2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "CoralResting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorLevel3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL3"
           }
         },
         {
