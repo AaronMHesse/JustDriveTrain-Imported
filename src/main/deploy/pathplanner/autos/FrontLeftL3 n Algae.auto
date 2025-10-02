@@ -7,123 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right_MoveAndTrough_1"
+            "pathName": "FrontLeftL3_n_Algae_1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralTrough"
+            "name": "ElevatorLevel3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralRotateHome"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.75
+            "waitTime": 1.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralOutput"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopCoralWheels"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralResting"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right_MoveAndTrough_2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ElevatorStation"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CoralStationPickup"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PointPickup"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopCoralWheels"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralResting"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right_MoveAndTrough_3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ElevatorLevel4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "CoralL4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralPickup"
+            "name": "90DegCoralOutput"
           }
         },
         {
@@ -139,9 +59,63 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ElevatorLevel2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LightsL2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralResting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FrontLeftL3_n_Algae_2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaeResting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaePickup"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopAlgaeWheels"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FrontLeftL3_n_Algae_3"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -151,7 +125,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "CoralResting"
+                  "name": "LightsL1"
                 }
               }
             ]

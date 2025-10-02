@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4_And_Algae_1"
+            "pathName": "FrontL4_n_Algae_1"
           }
         },
         {
@@ -73,7 +73,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4_And_Algae_2"
+            "pathName": "FrontL4_n_Algae_2"
           }
         },
         {
@@ -109,7 +109,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4_And_Algae_3"
+            "pathName": "FrontL4_n_Algae_3"
           }
         }
       ]

@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BackLeft Trough"
+            "pathName": "DoubleBackLeftL4_1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralL2"
+            "name": "CoralReef"
           }
         },
         {
@@ -91,7 +91,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left_MoveAndTrough_2"
+            "pathName": "DoubleBackLeftL4_2"
           }
         },
         {
@@ -163,13 +163,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left_MoveAndTrough_3"
+            "pathName": "DoubleBackLeftL4_3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralL2"
+            "name": "CoralReef"
           }
         },
         {
