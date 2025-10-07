@@ -36,6 +36,9 @@ public class Robot extends TimedRobot {
   GenericHID m_operatorBoard = new GenericHID(1);
 
 public Robot() {
+
+// CameraServer.startAutomaticCapture();
+
 }
 
   /**
@@ -55,11 +58,7 @@ public Robot() {
       e.printStackTrace();
     }
 
-    // new RunCommand(() -> m_connectorX.c_startup(), m_connectorX);
-
   // CameraServer.startAutomaticCapture();
-  // Shuffleboard.getTab("Camera")
-  //             .add("Camera Feed", CameraServer.getServer());
   }
 
   /**

@@ -68,11 +68,11 @@ public AlgaeArms () {
     }
 
     public Command c_algaeArmsProcessor() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(56, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(65, ControlType.kPosition), this);
     }
 
     public Command c_algaeArmsIntake() {
-        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(75, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_armsMotor.getClosedLoopController().setReference(74, ControlType.kPosition), this);
     }
 
 
@@ -82,11 +82,11 @@ public AlgaeArms () {
     }
 
     public void v_algaeArmsProcessor() {
-        m_armsMotor.getClosedLoopController().setReference(56, ControlType.kPosition);
+        m_armsMotor.getClosedLoopController().setReference(65, ControlType.kPosition);
     }
 
     public void v_algaeArmsIntake() {
-        m_armsMotor.getClosedLoopController().setReference(75, ControlType.kPosition);
+        m_armsMotor.getClosedLoopController().setReference(74, ControlType.kPosition);
     }
 
 

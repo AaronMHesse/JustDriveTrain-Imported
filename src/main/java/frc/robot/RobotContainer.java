@@ -64,8 +64,8 @@ private final ConnectorX m_connectorX = new ConnectorX();
         //CORAL COMMANDS
     NamedCommands.registerCommand("CoralOutput", m_coralWheels.c_outsideCoralWheelsRun(-0.5));
     NamedCommands.registerCommand("90DegCoralOutput", m_coralWheels.c_coral90DegOutput());
-    NamedCommands.registerCommand("CoralPickup", m_coralWheels.c_outsideCoralWheelsRun(-0.5));
-    NamedCommands.registerCommand("StopCoralWheels", m_coralWheels.c_outsideCoralWheelsRun(0));
+    NamedCommands.registerCommand("CoralPickup", m_coralWheels.c_outsideCoralWheelsRun(0.75));
+    NamedCommands.registerCommand("StopCoralWheels", m_coralWheels.c_allWheelsRun(0));
     NamedCommands.registerCommand("CoralRotateHome", m_coralRotator.c_clawHome());
     NamedCommands.registerCommand("CoralRotate90Deg", m_coralRotator.c_claw90Deg());
     NamedCommands.registerCommand("CoralResting", m_coralArm.c_coralArmResting());
@@ -125,6 +125,7 @@ m_coralWheels.setDefaultCommand(new RunCommand(() -> m_coralWheels.v_coralOutput
    //RESET ENCODERS                         SHARE BUTTON
     new JoystickButton(m_driverController, 7).onTrue(new ParallelCommandGroup(
         m_elevatorSubsystem.c_resetElevatorEncoders(),
+        m_coralArm.c_resetCoralEncoder(),
         m_coralRotator.c_resetRotator()
     ));
 

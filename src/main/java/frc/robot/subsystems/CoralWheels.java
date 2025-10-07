@@ -35,12 +35,20 @@ private SparkMaxConfig m_wheelConfig = new SparkMaxConfig();
     m_bottomWheels.set(-0.75);
   }
 
+  public Command c_allWheelsRun(double speed) {
+    return new InstantCommand(() -> {
+      m_topWheels.set(speed);
+      m_bottomWheels.set(speed);
+      m_insideWheel.set(speed);
+    }, this);
+  }
+
   public void v_coralOutput(double axis) {
     if (axis >= 0.5) {
     if (CoralRotator.IsClaw90Deg == false) {
-      m_topWheels.set(0.5);
-      m_bottomWheels.set(0.5);
-      m_insideWheel.set(-0.7);
+      m_topWheels.set(0.7);
+      m_bottomWheels.set(0.7);
+      m_insideWheel.set(-1);
     } else {
       m_topWheels.set(-0.5);
       m_bottomWheels.set(0.5);
