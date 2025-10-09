@@ -93,8 +93,8 @@ public static double elevatorPosition;
 
   public Command c_elevatorCoralStation() {
     return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(18, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-18, ControlType.kPosition);
+      m_elevatorMotor1.getClosedLoopController().setReference(13, ControlType.kPosition);
+      m_elevatorMotor2.getClosedLoopController().setReference(-13, ControlType.kPosition);
     }, this);
   }
 

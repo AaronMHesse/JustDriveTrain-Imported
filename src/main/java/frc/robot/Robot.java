@@ -4,8 +4,13 @@ package frc.robot;
 import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -39,6 +44,8 @@ public Robot() {
 
 // CameraServer.startAutomaticCapture();
 
+
+
 }
 
   /**
@@ -57,6 +64,28 @@ public Robot() {
     } catch (ParseException e) {
       e.printStackTrace();
     }
+
+    new Thread(() -> {
+            UsbCamera camera = CameraServer.startAutomaticCapture();
+            camera.setResolution(640, 480);
+
+            CvSink cvSink = CameraServer.getVideo();
+            CvSource outputStream = CameraServer.putVideo("Grayscale Output", 244, 244);
+
+            Mat inputMat = new Mat();
+            Mat grayMat = new Mat();
+
+            while (!Thread.interrupted()) {
+                if (cvSink.grabFrame(inputMat) == 0) {
+                    // It's possible for grabFrame to fail, so we should check the return value.
+                    // If it fails, we'll just skip this frame and try again.
+                    continue;
+                }
+
+                Imgproc.cvtColor(inputMat, grayMat, Imgproc.COLOR_BGR2GRAY);
+                outputStream.putFrame(grayMat);
+            }
+        }).start();
 
   // CameraServer.startAutomaticCapture();
   }
@@ -77,8 +106,8 @@ public Robot() {
     double Rtrigger = m_driverController.getRawAxis(3);
     MyConstants.kTriggerR = Rtrigger;
 
-    SmartDashboard.putNumber("Right Trigger", Rtrigger);
-    SmartDashboard.putNumber("Left Trigger", Ltrigger);
+    // SmartDashboard.putNumber("Right Trigger", Rtrigger);
+    // SmartDashboard.putNumber("Left Trigger", Ltrigger);
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,

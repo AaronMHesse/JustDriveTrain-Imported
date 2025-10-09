@@ -54,35 +54,35 @@ public CoralArms() {
 
         //POSITIONING
     public Command c_coralArmResting() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(0, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-9, ControlType.kPosition), this);
     }
 
     public Command c_autoCoralArmHoldResting() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-18, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-27, ControlType.kPosition), this);
     }
 
     public Command c_coralTrough() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-32.5, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-41.5, ControlType.kPosition), this);
     }
 
     public Command c_autoCoralArmIntake() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-69, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-78, ControlType.kPosition), this);
     }
 
     public Command c_coralReef() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-6, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-15, ControlType.kPosition), this);
     }
 
     public Command c_coralArmStation() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-1, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-6.5, ControlType.kPosition), this);
     }
 
     public void v_coralArmHoldResting() {
-        m_clawArm.getClosedLoopController().setReference(-18, ControlType.kPosition);
+        m_clawArm.getClosedLoopController().setReference(-9, ControlType.kPosition);
     }
 
     public void v_coralArmIntake() {
-        m_clawArm.getClosedLoopController().setReference(-69, ControlType.kPosition);
+        m_clawArm.getClosedLoopController().setReference(-78, ControlType.kPosition);
     }
 
 
