@@ -7,6 +7,9 @@ import org.json.simple.parser.ParseException;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
@@ -41,9 +44,6 @@ public class Robot extends TimedRobot {
   GenericHID m_operatorBoard = new GenericHID(1);
 
 public Robot() {
-
-// CameraServer.startAutomaticCapture();
-
 
 
 }
@@ -86,6 +86,8 @@ public Robot() {
                 outputStream.putFrame(grayMat);
             }
         }).start();
+
+
 
   // CameraServer.startAutomaticCapture();
   }

@@ -4,6 +4,9 @@ import frc.robot.Constants;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -19,7 +22,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CoralArms extends SubsystemBase {
     
 private final SparkFlex m_clawArm = new SparkFlex(Constants.MyConstants.kCoralClawArm, MotorType.kBrushless);
+private RelativeEncoder m_relativeEncoder = m_clawArm.getEncoder();
+private CANcoder m_encoder = new CANcoder(25);
 private SparkFlexConfig m_clawConfig = new SparkFlexConfig();
+double absolutePosition;
 
 XboxController m_driverController = new XboxController(0);
 
@@ -30,11 +36,11 @@ public CoralArms() {
     m_clawConfig
     .inverted(false)
     .idleMode(IdleMode.kBrake);
-    m_clawConfig.externalEncoder
+    m_clawConfig.encoder
     .positionConversionFactor(45)
     .velocityConversionFactor(80);
     m_clawConfig.closedLoop
-    .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
+    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.15, 0, 0.55)
     .outputRange(-0.6, 0.6);
 
@@ -44,6 +50,8 @@ public CoralArms() {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Coral Arm Position", m_clawArm.getExternalEncoder().getPosition());
+
+        absolutePosition = m_encoder.getAbsolutePosition().getValueAsDouble();
     }
 
     
@@ -66,7 +74,7 @@ public CoralArms() {
     }
 
     public Command c_autoCoralArmIntake() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-78, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-74.5, ControlType.kPosition), this);
     }
 
     public Command c_coralReef() {
@@ -74,7 +82,7 @@ public CoralArms() {
     }
 
     public Command c_coralArmStation() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-6.5, ControlType.kPosition), this);
+        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-4.5, ControlType.kPosition), this);
     }
 
     public void v_coralArmHoldResting() {
@@ -82,7 +90,7 @@ public CoralArms() {
     }
 
     public void v_coralArmIntake() {
-        m_clawArm.getClosedLoopController().setReference(-78, ControlType.kPosition);
+        m_clawArm.getClosedLoopController().setReference(-74.5, ControlType.kPosition);
     }
 
 

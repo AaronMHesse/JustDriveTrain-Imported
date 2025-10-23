@@ -125,8 +125,7 @@ m_coralWheels.setDefaultCommand(new RunCommand(() -> m_coralWheels.v_coralOutput
    //RESET ENCODERS                         SHARE BUTTON
     new JoystickButton(m_driverController, 7).onTrue(new ParallelCommandGroup(
         m_elevatorSubsystem.c_resetElevatorEncoders(),
-        m_coralArm.c_resetCoralEncoder(),
-        m_coralRotator.c_resetRotator()
+        m_coralArm.c_resetCoralEncoder()
     ));
 
 
@@ -153,13 +152,13 @@ m_coralWheels.setDefaultCommand(new RunCommand(() -> m_coralWheels.v_coralOutput
     ));
 
         //ALGAE ARMS
-    new JoystickButton(m_driverController, MyConstants.kYButton).whileTrue(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(0.4), m_algaeArms));
-    new JoystickButton(m_driverController, MyConstants.kYButton).whileFalse(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(0), m_algaeArms));
-    new JoystickButton(m_driverController, MyConstants.kAButton).whileTrue(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(-0.4), m_algaeArms));
-    new JoystickButton(m_driverController, MyConstants.kAButton).whileFalse(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(0), m_algaeArms));
+    // new JoystickButton(m_driverController, MyConstants.kYButton).whileTrue(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(0.4), m_algaeArms));
+    // new JoystickButton(m_driverController, MyConstants.kYButton).whileFalse(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(0), m_algaeArms));
+    // new JoystickButton(m_driverController, MyConstants.kAButton).whileTrue(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(-0.4), m_algaeArms));
+    // new JoystickButton(m_driverController, MyConstants.kAButton).whileFalse(new RunCommand(() -> m_algaeArms.c_algaeArmsJog(0), m_algaeArms));
 
-    // new JoystickButton(m_driverController, MyConstants.kAButton).onTrue(new RunCommand(() -> m_coralRotator.v_clawHome(), m_coralRotator));
-    // new JoystickButton(m_driverController, MyConstants.kYButton).onTrue(new RunCommand(() -> m_coralRotator.v_claw90Deg(), m_coralRotator));
+    new JoystickButton(m_driverController, MyConstants.kAButton).onTrue(new RunCommand(() -> m_coralRotator.v_clawHome(), m_coralRotator));
+    new JoystickButton(m_driverController, MyConstants.kYButton).onTrue(new RunCommand(() -> m_coralRotator.v_claw90Deg(), m_coralRotator));
 
         //CORAL ARM
     new JoystickButton(m_driverController, MyConstants.kXButton).whileTrue(new RunCommand(() -> m_coralArm.v_coralArmJog(-0.3), m_coralArm));

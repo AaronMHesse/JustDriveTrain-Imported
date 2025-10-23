@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -17,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CoralRotator extends SubsystemBase {
 
   private final SparkFlex m_clawRotator = new SparkFlex(18, MotorType.kBrushless);
+  private CANcoder m_CANCoder = new CANcoder(25);
+  private RelativeEncoder m_relativeEncoder = m_clawRotator.getEncoder();
+  double absolutePosition;
   private SparkFlexConfig m_rotatorConfig = new SparkFlexConfig();
   public static boolean IsClaw90Deg;
 
@@ -25,15 +30,17 @@ public class CoralRotator extends SubsystemBase {
     m_rotatorConfig
     .inverted(false)
     .idleMode(IdleMode.kBrake);
-    m_rotatorConfig.externalEncoder
-    .positionConversionFactor(20)
+    m_rotatorConfig.encoder
+    .positionConversionFactor(1)
     .velocityConversionFactor(1);
     m_rotatorConfig.closedLoop
-    .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
-    .pid(0.1, 0, 0)
+    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    .pid(0.15, 0, 0)
     .outputRange(-0.25, 0.25);
 
     m_clawRotator.configure(m_rotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    m_clawRotator.getEncoder().setPosition(m_CANCoder.getAbsolutePosition().getValueAsDouble() * 25);
   }
 
   public void v_clawHome() {
@@ -42,7 +49,7 @@ public class CoralRotator extends SubsystemBase {
   }
 
   public void v_claw90Deg() {
-    m_clawRotator.getClosedLoopController().setReference(10, ControlType.kPosition);
+    m_clawRotator.getClosedLoopController().setReference(6, ControlType.kPosition);
     IsClaw90Deg = true;
   }
 
@@ -55,19 +62,14 @@ public class CoralRotator extends SubsystemBase {
 
   public Command c_claw90Deg() {
     return new InstantCommand(() -> {
-      m_clawRotator.getClosedLoopController().setReference(10, ControlType.kPosition);
+      m_clawRotator.getClosedLoopController().setReference(6, ControlType.kPosition);
       IsClaw90Deg = true;
-    }, this);
-  }
-
-  public Command c_resetRotator() {
-    return new InstantCommand(() -> {
-      m_clawRotator.getExternalEncoder().setPosition(0); 
     }, this);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Coral Rotator Position", m_clawRotator.getExternalEncoder().getPosition());
+    SmartDashboard.putNumber("Wrist Relative", m_clawRotator.getEncoder().getPosition());
+    SmartDashboard.putNumber("Wrist Absolute", m_CANCoder.getAbsolutePosition().getValueAsDouble());
   }
 }
