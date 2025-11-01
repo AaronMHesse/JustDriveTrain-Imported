@@ -169,11 +169,11 @@ m_coralWheels.setDefaultCommand(new RunCommand(() -> m_coralWheels.v_coralOutput
     // MANUAL ELEVATOR
 
         //D-PAD UP
-    new POVButton(m_driverController, 0).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0.3), m_elevatorSubsystem));
+    new POVButton(m_driverController, 0).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0.75), m_elevatorSubsystem));
     new POVButton(m_driverController, 0).whileFalse(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0), m_elevatorSubsystem));
 
         //D-PAD DOWN
-    new POVButton(m_driverController, 180).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(-0.3), m_elevatorSubsystem));
+    new POVButton(m_driverController, 180).whileTrue(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(-0.75), m_elevatorSubsystem));
     new POVButton(m_driverController, 180).whileFalse(new RunCommand(() -> m_elevatorSubsystem.c_elevatorJog(0), m_elevatorSubsystem));
 
 

@@ -32,7 +32,7 @@ public static double elevatorPosition;
     .closedLoopRampRate(0.15);
     m_elevatorConfig.encoder
     .positionConversionFactor(1)
-    .velocityConversionFactor(45);
+    .velocityConversionFactor(15);
     m_elevatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
     .pid(0.0275, 0, 0.5)
