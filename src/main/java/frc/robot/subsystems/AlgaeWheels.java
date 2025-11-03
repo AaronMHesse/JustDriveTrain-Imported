@@ -31,14 +31,9 @@ XboxController m_driverController = new XboxController(0);
         m_bottomWheels.set(-speed);
     }
 
-    public void c_algaeWheelsOutput(double axis, double speed) {
-            if (axis >= 0.5) {
-                m_topWheels.set(speed - 0.25);
-                m_bottomWheels.set(-speed - 0.15);
-                } else {
-                    m_topWheels.set(speed * 0);
-                    m_bottomWheels.set(speed * 0);
-                }
+    public void c_algaeWheelsOutput(double top, double bottom) {
+                m_topWheels.set(top);
+                m_bottomWheels.set(-bottom);
     }
     
   @Override

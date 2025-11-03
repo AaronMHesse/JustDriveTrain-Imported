@@ -2,10 +2,18 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import static edu.wpi.first.units.Units.Newton;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -25,7 +33,7 @@ public class AlgaeArms extends SubsystemBase {
     TalonFX m_kraken = new TalonFX(12);
     TalonFXConfiguration m_config = new TalonFXConfiguration();
     CANcoder m_encoder = new CANcoder(21);
-    final MotionMagicDutyCycle m_position = new MotionMagicDutyCycle(0);
+    final MotionMagicDutyCycle m_position = new MotionMagicDutyCycle(0).withSlot(0);
 
 // private final SparkFlex m_armsMotor = new SparkFlex(Constants.MyConstants.kAlgaeArm, MotorType.kBrushless);
 // private SparkFlexConfig m_config = new SparkFlexConfig();
@@ -35,12 +43,18 @@ XboxController m_driverController = new XboxController(0);
 
 public AlgaeArms () {
 
-    m_config.MotionMagic.MotionMagicAcceleration = 20;
-    m_config.MotionMagic.MotionMagicCruiseVelocity = 40;
+    // m_config.Slot0.kP = 0.1;
+    // m_config.Slot0.kI = 0;
+    // m_config.Slot0.kD = 0;
+    // m_config.Voltage.withPeakForwardVoltage(Volts.of(16)).withPeakReverseVoltage(Volts.of(-16));
 
-    m_config.Slot0.kP = 0.2;
-    m_config.Slot0.kI = 0;
-    m_config.Slot0.kD = 0;
+    m_config.MotionMagic.MotionMagicAcceleration = 40;
+    m_config.MotionMagic.MotionMagicCruiseVelocity = 80;
+    m_config.MotionMagic.MotionMagicJerk = 160;
+
+    m_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    m_config.Feedback.SensorToMechanismRatio = 4;
+    m_config.Feedback.RotorToSensorRatio = 80;
 
     m_kraken.getConfigurator().apply(m_config);
 
@@ -61,17 +75,21 @@ public AlgaeArms () {
 
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("Algae Arms Position", m_armsMotor.getExternalEncoder().getPosition());
+        SmartDashboard.putNumber("AlgaePos", m_kraken.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("AlgaeAbsolutePos", m_encoder.getAbsolutePosition().getValueAsDouble() * 360);
     }
 
+    public void v_manualPos(double speed) {
+        m_kraken.set(speed);
+    }
+
+    public void v_setPos(double deg) {
+        m_kraken.setControl(m_position.withPosition(deg / 360));
+    }
 
     // public Command c_autoAlgaeArmsJog(double speed) {
     //     return new InstantCommand(() -> m_armsMotor.set(speed));
     // }
-
-        public Command c_testPos() {
-            return new InstantCommand(() -> m_kraken.setControl(m_position.withPosition(10)));
-        }
 
     // public void c_algaeArmsJog(double speed) {
     //     m_armsMotor.set(speed);
