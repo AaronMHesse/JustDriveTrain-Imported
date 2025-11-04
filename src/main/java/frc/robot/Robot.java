@@ -1,31 +1,18 @@
 package frc.robot;
 
-
 import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.Constants.MyConstants;
-// import frc.robot.subsystems.ConnectorX;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -38,10 +25,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  // private ConnectorX m_connectorX = new ConnectorX();
-
-  XboxController m_driverController = new XboxController(0);
-  GenericHID m_operatorBoard = new GenericHID(1);
 
 public Robot() {
 
@@ -55,8 +38,6 @@ public Robot() {
   
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
     try {
       m_robotContainer = new RobotContainer();
     } catch (IOException e) {
@@ -86,10 +67,6 @@ public Robot() {
                 outputStream.putFrame(grayMat);
             }
         }).start();
-
-
-
-  // CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -102,26 +79,11 @@ public Robot() {
   @Override
   public void robotPeriodic() {
 
-    double Ltrigger = m_driverController.getRawAxis(2);
-    MyConstants.kTriggerL = Ltrigger;
-
-    double Rtrigger = m_driverController.getRawAxis(3);
-    MyConstants.kTriggerR = Rtrigger;
-
-    // SmartDashboard.putNumber("Right Trigger", Rtrigger);
-    // SmartDashboard.putNumber("Left Trigger", Ltrigger);
-
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
-    double RightButtons = m_operatorBoard.getRawAxis(2);
-    MyConstants.rightButtons = RightButtons;
-
-    double BottomRightButtons = m_operatorBoard.getRawAxis(1);
-    MyConstants.bottomRightButtons = BottomRightButtons;
     
   }
 

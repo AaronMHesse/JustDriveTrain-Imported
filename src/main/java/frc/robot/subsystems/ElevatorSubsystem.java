@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.ClosedLoopSlot;
+import java.text.DecimalFormat;
+import java.util.Map;
+
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -10,6 +12,8 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,101 +21,81 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-public final SparkFlex m_elevatorMotor1 = new SparkFlex(15, MotorType.kBrushless);
-private final SparkFlex m_elevatorMotor2 = new SparkFlex(16, MotorType.kBrushless);
-private SparkFlexConfig m_elevatorConfig = new SparkFlexConfig();
-public boolean elevatorTooTall;
-public static double elevatorPosition;
+  private final SparkFlex m_elevatorMotor1 = new SparkFlex(15, MotorType.kBrushless);
+  private final SparkFlex m_elevatorMotor2 = new SparkFlex(16, MotorType.kBrushless);
+  private SparkFlexConfig m_motor1config = new SparkFlexConfig();
+  private SparkFlexConfig m_motor2config = new SparkFlexConfig();
+  private DecimalFormat df = new DecimalFormat("#.##");
 
   public ElevatorSubsystem() {
 
-    //PID SETUP
-    m_elevatorConfig
+    //PID Setup
+    m_motor1config
     .inverted(true)
     .idleMode(IdleMode.kBrake)
-    .closedLoopRampRate(0.15);
-    m_elevatorConfig.encoder
+    .smartCurrentLimit(80)
+    .closedLoopRampRate(0.45);
+    m_motor1config.softLimit
+    .forwardSoftLimitEnabled(true)
+    .forwardSoftLimit(57)
+    .reverseSoftLimitEnabled(true)
+    .reverseSoftLimit(0);
+    m_motor1config.encoder
     .positionConversionFactor(1)
-    .velocityConversionFactor(15);
-    m_elevatorConfig.closedLoop
+    .velocityConversionFactor(1);
+    m_motor1config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.0275, 0, 0.5)
-    .outputRange(-1, 1);
+    .pid(0.09, 0, 0.25)
+    .outputRange(-0.4, 0.6);
 
-    m_elevatorConfig.closedLoop
+    m_motor2config
+    .inverted(false)
+    .idleMode(IdleMode.kBrake)
+    .smartCurrentLimit(80)
+    .closedLoopRampRate(0.45);
+    m_motor2config.softLimit
+    .forwardSoftLimitEnabled(true)
+    .forwardSoftLimit(57)
+    .reverseSoftLimitEnabled(true)
+    .reverseSoftLimit(0);
+    m_motor2config.encoder
+    .positionConversionFactor(1)
+    .velocityConversionFactor(1);
+    m_motor2config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.025, 0, 0.5, ClosedLoopSlot.kSlot1)
-    .outputRange(-0.8, 0.8, ClosedLoopSlot.kSlot1);
+    .pid(0.09, 0, 0.25)
+    .outputRange(-0.4, 0.6);
 
-    m_elevatorMotor2.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_elevatorMotor1.configure(m_elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_elevatorMotor1.configure(m_motor1config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_elevatorMotor2.configure(m_motor2config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    Shuffleboard.getTab("SmartDashboard")
+    .add("Test", m_elevatorMotor1.getEncoder().getPosition())
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withSize(1, 2)
+    .withProperties(Map.of("Min", 0, "Max", 57))
+    .withPosition(0, 0);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Elevator Position", m_elevatorMotor1.getEncoder().getPosition());
-    // elevatorPosition = m_elevatorMotor1.getEncoder().getPosition();
+    double elevatorPosition = m_elevatorMotor1.getEncoder().getPosition();
+    SmartDashboard.putString("Elevator Position", df.format(elevatorPosition));
+    SmartDashboard.updateValues();
   }
 
-    //ELEVATOR POSITIONING
-  public Command c_autoElevatorDown() {
-    return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
-      elevatorTooTall = false;
-    }, this);
+    //Positioning
+  public void v_setpoint(double pos) {
+    m_elevatorMotor1.getClosedLoopController().setReference(pos, ControlType.kPosition);
+    m_elevatorMotor2.getClosedLoopController().setReference(pos, ControlType.kPosition);
   }
 
-  public Command c_elevatorL3() {
-    return new InstantCommand(() -> {
-    m_elevatorMotor1.getClosedLoopController().setReference(73, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(-73, ControlType.kPosition);
-    elevatorTooTall = false;
-    }, this);
-  }
-
-  public Command c_elevatorL4() {
-    return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(138, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-138, ControlType.kPosition);
-      elevatorTooTall = true;
-    }, this);
-  }
-
-  public Command c_elevatorBarge() {
-    return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(190, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-190, ControlType.kPosition);
-    }, this);
-  }
-
-  public void c_elevatorDown() {
-    m_elevatorMotor1.getClosedLoopController().setReference(0, ControlType.kPosition);
-    m_elevatorMotor2.getClosedLoopController().setReference(0, ControlType.kPosition);
-    elevatorTooTall = false;
-  }
-
-  public Command c_elevatorCoralStation() {
-    return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(13, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-13, ControlType.kPosition);
-    }, this);
-  }
-
-  public Command c_elevatorL2() {
-    return new InstantCommand(() -> {
-      m_elevatorMotor1.getClosedLoopController().setReference(32, ControlType.kPosition);
-      m_elevatorMotor2.getClosedLoopController().setReference(-32, ControlType.kPosition);
-    }, this);
-  }
-
-  public void c_elevatorJog(double speed) {
+  public void v_jog(double speed) {
     m_elevatorMotor1.set(speed);
-    m_elevatorMotor2.set(-speed);
+    m_elevatorMotor2.set(speed);
   }
 
-
-  //RESET METHOD
+  //Reset Encoders
   public Command c_resetElevatorEncoders() {
     return new InstantCommand(() -> {
       m_elevatorMotor1.getEncoder().setPosition(0);

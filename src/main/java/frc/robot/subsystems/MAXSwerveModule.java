@@ -52,6 +52,7 @@ public class MAXSwerveModule {
     
 
     //ENCODER FEEDBACK
+    m_drivingConfig.inverted(true);
     m_drivingConfig.encoder
     .velocityConversionFactor(1)
     .positionConversionFactor(1);
@@ -100,7 +101,6 @@ public class MAXSwerveModule {
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
     m_drivingEncoder.setPosition(0);
-    m_drivingFlex.setInverted(isInverted);
   }
 
   /**

@@ -1,104 +1,69 @@
 package frc.robot.subsystems;
-import frc.robot.Constants;
 
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import java.text.DecimalFormat;
 
-import edu.wpi.first.wpilibj.XboxController;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralArms extends SubsystemBase {
     
-private final SparkFlex m_clawArm = new SparkFlex(Constants.MyConstants.kCoralClawArm, MotorType.kBrushless);
-private RelativeEncoder m_relativeEncoder = m_clawArm.getEncoder();
-private CANcoder m_encoder = new CANcoder(25);
-private SparkFlexConfig m_clawConfig = new SparkFlexConfig();
-double absolutePosition;
-
-XboxController m_driverController = new XboxController(0);
+    private TalonFX m_motor = new TalonFX(10);
+    private TalonFXConfiguration m_config = new TalonFXConfiguration();
+    private final MotionMagicVoltage m_position = new MotionMagicVoltage(0).withSlot(0);
+    private DecimalFormat df = new DecimalFormat("#.##");
 
 
 public CoralArms() {
 
-    //PID SETUP
-    m_clawConfig
-    .inverted(false)
-    .idleMode(IdleMode.kBrake);
-    m_clawConfig.encoder
-    .positionConversionFactor(45)
-    .velocityConversionFactor(80);
-    m_clawConfig.closedLoop
-    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.15, 0, 0.55)
-    .outputRange(-0.6, 0.6);
+    //PID Setup
+    m_config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    m_config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    m_config.Slot0.kP = 150;
+    m_config.Slot0.kD = 0.1;
+    m_config.Slot0.kA = 0.01;
+    m_config.Slot0.kS = 1;
+    m_config.Slot0.kV = 1;
+    m_config.Slot0.kG = 0.2;
 
-    m_clawArm.configure(m_clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    m_config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = .20834; //~75 on Shuffleboard
+
+    m_config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    m_config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+
+    m_config.MotionMagic.MotionMagicAcceleration = 300;
+    m_config.MotionMagic.MotionMagicCruiseVelocity = 1750;
+    m_config.MotionMagic.MotionMagicJerk = 750;
+
+    m_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    m_config.Feedback.FeedbackRemoteSensorID = 22;
+    m_config.Feedback.SensorToMechanismRatio = 4;
+    m_config.Feedback.RotorToSensorRatio = 80;
+
+    m_motor.getConfigurator().apply(m_config);
+
+    m_motor.stopMotor();
 }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Coral Arm Position", m_clawArm.getExternalEncoder().getPosition());
-
-        absolutePosition = m_encoder.getAbsolutePosition().getValueAsDouble();
+        double ArmPosition = m_motor.getPosition().getValueAsDouble() * 360;
+        SmartDashboard.putString("CoralPos.", df.format(ArmPosition));
     }
 
-    
-    public void v_coralArmJog(double speed) {
-        m_clawArm.set(-speed);
+    //Positioning
+    public void v_jog(double speed) {
+        m_motor.set(speed);
     }
 
-
-        //POSITIONING
-    public Command c_coralArmResting() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-9, ControlType.kPosition), this);
-    }
-
-    public Command c_autoCoralArmHoldResting() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-27, ControlType.kPosition), this);
-    }
-
-    public Command c_coralTrough() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-41.5, ControlType.kPosition), this);
-    }
-
-    public Command c_autoCoralArmIntake() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-74.5, ControlType.kPosition), this);
-    }
-
-    public Command c_coralReef() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-15, ControlType.kPosition), this);
-    }
-
-    public Command c_coralArmStation() {
-        return new InstantCommand(() -> m_clawArm.getClosedLoopController().setReference(-4.5, ControlType.kPosition), this);
-    }
-
-    public void v_coralArmHoldResting() {
-        m_clawArm.getClosedLoopController().setReference(-9, ControlType.kPosition);
-    }
-
-    public void v_coralArmIntake() {
-        m_clawArm.getClosedLoopController().setReference(-74.5, ControlType.kPosition);
-    }
-
-
-   
-    //RESET METHOD
-    public Command c_resetCoralEncoder() {
-        return new InstantCommand(() -> {
-        m_clawArm.getExternalEncoder().setPosition(0);
-        }, this);
+    public void v_setpoint(double deg) {
+        m_motor.setControl(m_position.withPosition(deg/360));
     }
 }
