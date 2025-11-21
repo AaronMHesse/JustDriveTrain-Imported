@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AlgaeArmHome;
 import frc.robot.commands.AlgaeIntake;
+import frc.robot.commands.AlgaeL2Pickup;
+import frc.robot.commands.AlgaeL3Pickup;
 import frc.robot.commands.AlgaeProcessor;
 import frc.robot.commands.Barge;
 import frc.robot.commands.CoralArmHome;
@@ -17,7 +19,7 @@ import frc.robot.commands.CoralTrough;
 import frc.robot.commands.HomeAllManipulators;
 import frc.robot.subsystems.AlgaeArms;
 import frc.robot.subsystems.AlgaeWheels;
-import frc.robot.subsystems.ConnectorX;
+import frc.robot.subsystems.CTRE_CANdle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.CoralArms;
@@ -46,7 +48,7 @@ public class RobotContainer {
   public final AlgaeArms m_algaeArms = new AlgaeArms();
   private final AlgaeWheels m_algaeWheels = new AlgaeWheels();
   private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
-private final ConnectorX m_connectorX = new ConnectorX();
+  private final CTRE_CANdle m_CANdle = new CTRE_CANdle();
   private final SendableChooser<Command> autoChooser;
 
   //Controllers
@@ -69,7 +71,7 @@ private final ConnectorX m_connectorX = new ConnectorX();
     NamedCommands.registerCommand("CoralOutput", m_coralWheels.c_outsideCoralWheelsRun(-0.5));
     NamedCommands.registerCommand("90DegCoralOutput", m_coralWheels.c_coral90DegOutput());
     NamedCommands.registerCommand("CoralPickup", m_coralWheels.c_outsideCoralWheelsRun(0.75));
-    NamedCommands.registerCommand("StopCoralWheels", m_coralWheels.c_allWheelsRun(0));
+    NamedCommands.registerCommand("StopCoralWheels", m_coralWheels.c_stopAllWheels());
     NamedCommands.registerCommand("CoralRotateHome", m_coralRotator.c_clawHome());
     NamedCommands.registerCommand("CoralRotate90Deg", m_coralRotator.c_claw90Deg());
     // NamedCommands.registerCommand("CoralResting", m_coralArm.c_coralArmResting());
@@ -95,12 +97,6 @@ private final ConnectorX m_connectorX = new ConnectorX();
     // NamedCommands.registerCommand("ElevatorLevel3", m_elevatorSubsystem.c_elevatorL3());
     // NamedCommands.registerCommand("ElevatorLevel4", m_elevatorSubsystem.c_elevatorL4());
     
-    NamedCommands.registerCommand("LightsL1", m_connectorX.c_elevator1Lights());
-    NamedCommands.registerCommand("LightsL2", m_connectorX.c_elevator2Lights());
-    NamedCommands.registerCommand("LightsL3", m_connectorX.c_elevator3Lights());
-    NamedCommands.registerCommand("LightsL4", m_connectorX.c_elevator4Lights());
-    
-
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -121,10 +117,10 @@ private final ConnectorX m_connectorX = new ConnectorX();
 
 //DRIVER BUTTONS
 
-    //ZERO GYRO                             OPTION BUTTON
+    //ZERO GYRO
     m_driverController.start().onTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-   //RESET ENCODERS                         SHARE BUTTON
+   //RESET ELEVATOR
     m_driverController.back().onTrue(m_elevatorSubsystem.c_resetElevatorEncoders());
 
 
@@ -132,20 +128,29 @@ private final ConnectorX m_connectorX = new ConnectorX();
 
         // INTAKE/OUPUT CONTROLS
     m_driverController.leftBumper()
-        .whileTrue(new InstantCommand(() -> m_algaeWheels.c_algaeWheelsRun(-0.8)))
-        .onFalse(new InstantCommand(() -> m_algaeWheels.c_algaeWheelsRun(0)));
+        .whileTrue(new InstantCommand(() -> m_algaeWheels.v_algaeWheelsRun(-0.8)))
+        .whileTrue(new InstantCommand(() -> m_CANdle.v_intake()))
+        .onFalse(new InstantCommand(() -> m_algaeWheels.v_algaeWheelsRun(0)))
+        .onFalse(new InstantCommand(() -> m_CANdle.v_stopI_O()));
 
     m_driverController.rightBumper()
-        .whileTrue(new RunCommand(() -> m_coralWheels.v_coralOutput(0, 0, 0, 0.65), m_coralWheels))
-        .onFalse(new InstantCommand(() -> m_coralWheels.v_coralOutput(0, 0, 0, 0)));
+        .whileTrue(new InstantCommand(() -> m_coralWheels.v_90degSpin(0.4), m_coralWheels))
+        .whileTrue(new InstantCommand(() -> m_CANdle.v_intake()))
+        .onFalse(new InstantCommand(() -> m_coralWheels.v_90degSpin(0), m_coralWheels))
+        .onFalse(new InstantCommand(() -> m_CANdle.v_stopI_O()));
 
-        m_driverController.leftTrigger(0.5)
-        .whileTrue(new InstantCommand(() -> m_algaeWheels.c_algaeWheelsOutput(0.30, 0.45)))
-        .onFalse(new InstantCommand(() -> m_algaeWheels.c_algaeWheelsOutput(0, 0)));
+    m_driverController.leftTrigger(0.5)
+        .whileTrue(new InstantCommand(() -> m_algaeWheels.v_algaeWheelsRun(0.30)))
+        .whileTrue(new InstantCommand(() -> m_CANdle.v_shootOut()))
+        .onFalse(new InstantCommand(() -> m_algaeWheels.v_algaeWheelsRun(0)))
+        .onFalse(new InstantCommand(() -> m_CANdle.v_stopI_O()));
 
     m_driverController.rightTrigger(0.5)
-        .whileTrue(new RunCommand(() -> m_coralWheels.v_coralOutput(0.7, 0.7, 1, 0.5), m_coralWheels))
-        .onFalse(new InstantCommand(() -> m_coralWheels.v_coralOutput(0, 0, 0, 0)));
+        .whileTrue(new RunCommand(() -> m_coralWheels.v_0degSpin(0.7, 0.7, 1, 0.25), m_coralWheels))
+        .whileTrue(new InstantCommand(() -> m_CANdle.v_shootOut()))
+        .onFalse(new RunCommand(() -> m_coralWheels.v_0degSpin(0, 0, 0, 0), m_coralWheels))
+        .onFalse(new InstantCommand(() -> m_CANdle.v_stopI_O()));
+
 
         //ALGAE ARMS
     m_driverController.a()
@@ -174,48 +179,54 @@ private final ConnectorX m_connectorX = new ConnectorX();
 
     //HOME ALL MANIPULATORS
     m_driverController.rightStick().onTrue
-        (new HomeAllManipulators(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_algaeArms, m_connectorX));
+        (new HomeAllManipulators(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_algaeArms, m_CANdle));
 
 
     // OPERATOR BUTTON BOARD
 
         // ELEVATOR
     m_operatorBoard.button(1).onTrue
-        (new CoralL4(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_connectorX));
+        (new CoralL4(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_CANdle));
 
     m_operatorBoard.button(4).onTrue
-        (new CoralL3(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_connectorX));
+        (new CoralL3(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_CANdle));
 
     m_operatorBoard.button(7).onTrue
-        (new CoralL2(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_connectorX));
+        (new CoralL2(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_CANdle));
 
     
         // ALGAE CLAW
     m_operatorBoard.button(2).onTrue
-        (new Barge(m_elevatorSubsystem, m_algaeArms, m_connectorX));
+        (new Barge(m_elevatorSubsystem, m_algaeArms, m_CANdle));
 
     m_operatorBoard.button(5).onTrue
         (new AlgaeArmHome(m_algaeArms));
 
     m_operatorBoard.button(8).onTrue
-        (new AlgaeProcessor(m_algaeArms));
+        (new AlgaeProcessor(m_elevatorSubsystem, m_algaeArms));
 
     m_operatorBoard.button(11).onTrue
-        (new AlgaeIntake(m_elevatorSubsystem, m_algaeArms, m_connectorX));
+        (new AlgaeIntake(m_elevatorSubsystem, m_algaeArms, m_CANdle));
 
+    m_operatorBoard.axisGreaterThan(0, 0.5).onTrue
+        (new AlgaeL2Pickup(m_elevatorSubsystem, m_algaeArms, m_CANdle));
+
+    m_operatorBoard.axisLessThan(0, -0.5).onTrue
+        (new AlgaeL3Pickup(m_elevatorSubsystem, m_algaeArms, m_CANdle));
+        
     
         // CORAL CLAW
     m_operatorBoard.button(3).onTrue
-        (new CoralStation(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_connectorX));
+        (new CoralStation(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_CANdle));
 
     m_operatorBoard.button(6).onTrue
         (new CoralArmHome(m_coralArm, m_coralRotator));
 
     m_operatorBoard.button(9).onTrue
-        (new CoralTrough(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_connectorX));
+        (new CoralTrough(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_CANdle));
 
     m_operatorBoard.button(12).onTrue
-        (new CoralIntake(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_connectorX));
+        (new CoralIntake(m_elevatorSubsystem, m_coralArm, m_coralRotator, m_CANdle));
   }
 
   public Command getAutonomousCommand() {

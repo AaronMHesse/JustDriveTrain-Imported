@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.text.DecimalFormat;
-
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -20,10 +18,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CoralRotator extends SubsystemBase {
 
   private final SparkFlex m_wrist = new SparkFlex(18, MotorType.kBrushless);
-  private CANcoder m_CANCoder = new CANcoder(25);
+  private CANcoder m_CANCoder = new CANcoder(20);
   private SparkFlexConfig m_rotatorConfig = new SparkFlexConfig();
   public static boolean IsClaw90Deg;
-  public DecimalFormat df = new DecimalFormat("#.##");
 
   public CoralRotator() {
 
@@ -31,8 +28,13 @@ public class CoralRotator extends SubsystemBase {
     m_rotatorConfig
     .inverted(false)
     .idleMode(IdleMode.kBrake);
+    m_rotatorConfig.softLimit
+    .forwardSoftLimitEnabled(true)
+    .forwardSoftLimit(90)
+    .reverseSoftLimitEnabled(true)
+    .reverseSoftLimit(0);
     m_rotatorConfig.encoder
-    .positionConversionFactor(1)
+    .positionConversionFactor(15)
     .velocityConversionFactor(1);
     m_rotatorConfig.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -40,7 +42,7 @@ public class CoralRotator extends SubsystemBase {
     .outputRange(-0.25, 0.25);
 
     m_wrist.configure(m_rotatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_wrist.getEncoder().setPosition(m_CANCoder.getAbsolutePosition().getValueAsDouble() * 25);
+    m_wrist.getEncoder().setPosition(m_CANCoder.getAbsolutePosition().getValueAsDouble() * 375);
   }
 
   //Positioning
@@ -50,7 +52,7 @@ public class CoralRotator extends SubsystemBase {
   }
 
   public void v_claw90Deg() {
-    m_wrist.getClosedLoopController().setReference(6, ControlType.kPosition);
+    m_wrist.getClosedLoopController().setReference(100, ControlType.kPosition);
     IsClaw90Deg = true;
   }
 
@@ -63,7 +65,7 @@ public class CoralRotator extends SubsystemBase {
 
   public Command c_claw90Deg() {
     return new InstantCommand(() -> {
-      m_wrist.getClosedLoopController().setReference(6, ControlType.kPosition);
+      m_wrist.getClosedLoopController().setReference(90, ControlType.kPosition);
       IsClaw90Deg = true;
     }, this);
   }
@@ -71,6 +73,9 @@ public class CoralRotator extends SubsystemBase {
   @Override
   public void periodic() {
     double WristPosition = m_wrist.getEncoder().getPosition();
-    SmartDashboard.putString("Wrist Pos", df.format(WristPosition));
+    SmartDashboard.putNumber("Wrist Pos", Math.round(WristPosition * 100) / 100);
+    SmartDashboard.putNumber("Wrist NeoV Temp", m_wrist.getMotorTemperature());
+    SmartDashboard.putNumber("Wrist NeoV Current", Math.round(m_wrist.getOutputCurrent() * 10) / 10);
+    SmartDashboard.putNumber("Wrist NeoV ID", m_wrist.getDeviceId());
   }
 }

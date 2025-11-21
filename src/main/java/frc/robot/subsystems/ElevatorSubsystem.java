@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import java.text.DecimalFormat;
-import java.util.Map;
-
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,8 +9,6 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,7 +20,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final SparkFlex m_elevatorMotor2 = new SparkFlex(16, MotorType.kBrushless);
   private SparkFlexConfig m_motor1config = new SparkFlexConfig();
   private SparkFlexConfig m_motor2config = new SparkFlexConfig();
-  private DecimalFormat df = new DecimalFormat("#.##");
 
   public ElevatorSubsystem() {
 
@@ -34,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     .inverted(true)
     .idleMode(IdleMode.kBrake)
     .smartCurrentLimit(80)
-    .closedLoopRampRate(0.45);
+    .closedLoopRampRate(0.6);
     m_motor1config.softLimit
     .forwardSoftLimitEnabled(true)
     .forwardSoftLimit(57)
@@ -45,14 +39,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     .velocityConversionFactor(1);
     m_motor1config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.09, 0, 0.25)
-    .outputRange(-0.4, 0.6);
+    .pid(0.06, 0, 0.25)
+    .outputRange(-0.5, 0.7);
 
     m_motor2config
     .inverted(false)
     .idleMode(IdleMode.kBrake)
     .smartCurrentLimit(80)
-    .closedLoopRampRate(0.45);
+    .closedLoopRampRate(0.6);
     m_motor2config.softLimit
     .forwardSoftLimitEnabled(true)
     .forwardSoftLimit(57)
@@ -63,25 +57,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     .velocityConversionFactor(1);
     m_motor2config.closedLoop
     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .pid(0.09, 0, 0.25)
-    .outputRange(-0.4, 0.6);
+    .pid(0.06, 0, 0.25)
+    .outputRange(-0.5, 0.7);
 
     m_elevatorMotor1.configure(m_motor1config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_elevatorMotor2.configure(m_motor2config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    Shuffleboard.getTab("SmartDashboard")
-    .add("Test", m_elevatorMotor1.getEncoder().getPosition())
-    .withWidget(BuiltInWidgets.kNumberBar)
-    .withSize(1, 2)
-    .withProperties(Map.of("Min", 0, "Max", 57))
-    .withPosition(0, 0);
   }
 
   @Override
   public void periodic() {
     double elevatorPosition = m_elevatorMotor1.getEncoder().getPosition();
-    SmartDashboard.putString("Elevator Position", df.format(elevatorPosition));
-    SmartDashboard.updateValues();
+    SmartDashboard.putNumber("Elevator Position", Math.round(elevatorPosition * 100) / 100);
+    SmartDashboard.putNumber("Elevator NeoV Current", Math.round(m_elevatorMotor1.getOutputCurrent() * 10) / 10);
+    SmartDashboard.putNumber("Elevator NeoV Temp", m_elevatorMotor1.getMotorTemperature());
+    SmartDashboard.putNumber("Elevator NeoV ID", m_elevatorMotor1.getDeviceId());
+    SmartDashboard.putNumber("Elevator NeoV Velocity", Math.round(m_elevatorMotor1.getEncoder().getVelocity() * 10) / 10);
+
   }
 
     //Positioning

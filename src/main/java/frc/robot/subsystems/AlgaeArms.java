@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.text.DecimalFormat;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -17,7 +15,6 @@ public class AlgaeArms extends SubsystemBase {
     private TalonFX m_motor = new TalonFX(12);
     private TalonFXConfiguration m_config = new TalonFXConfiguration();
     private final MotionMagicVoltage m_position = new MotionMagicVoltage(0).withSlot(0);
-    private DecimalFormat df = new DecimalFormat("#.##");
 
 public AlgaeArms () {
 
@@ -46,12 +43,18 @@ public AlgaeArms () {
     m_config.Feedback.RotorToSensorRatio = 80;
 
     m_motor.getConfigurator().apply(m_config);
+
+    // m_encoder.setPosition(0);
 }
 
     @Override
     public void periodic() {
         double ArmPosition = m_motor.getPosition().getValueAsDouble() * 360;
-        SmartDashboard.putString("AlgaePos", df.format(ArmPosition));
+        SmartDashboard.putNumber("AlgaePos", Math.round(ArmPosition * 100) / 100);
+        SmartDashboard.putNumber("Algae Kraken Temp", m_motor.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Algae Kraken Current", Math.round(m_motor.getRotorVelocity().getValueAsDouble() * 10) / 10);
+        SmartDashboard.putNumber("Algae Kraken ID", m_motor.getDeviceID());
+        SmartDashboard.putNumber("Algae Kraken Velocity", Math.round(m_motor.getVelocity().getValueAsDouble() * 10) / 10);
     }
 
     //Positioning

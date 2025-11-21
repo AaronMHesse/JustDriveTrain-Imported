@@ -4,13 +4,18 @@ import java.io.IOException;
 
 import org.json.simple.parser.ParseException;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -54,7 +59,7 @@ public Robot() {
             CvSource outputStream = CameraServer.putVideo("Grayscale Output", 244, 244);
 
             Mat inputMat = new Mat();
-            Mat grayMat = new Mat();
+            // Mat grayMat = new Mat();
 
             while (!Thread.interrupted()) {
                 if (cvSink.grabFrame(inputMat) == 0) {
@@ -63,10 +68,25 @@ public Robot() {
                     continue;
                 }
 
-                Imgproc.cvtColor(inputMat, grayMat, Imgproc.COLOR_BGR2GRAY);
-                outputStream.putFrame(grayMat);
-            }
-        }).start();
+                int width = inputMat.cols();
+                int height = inputMat.rows();
+                Scalar color = new Scalar(0, 255, 0); // Green color in RGB
+                int thickness = 2;
+                int lineLength = 30;
+        
+                // Horizontal line
+                Imgproc.line(inputMat, new Point(width / 2 - lineLength / 2, height / 2), 
+                             new Point(width / 2 + lineLength / 2, height / 2), color, thickness);
+                // Vertical line
+                Imgproc.line(inputMat, new Point(width / 2, height / 2 - lineLength / 2), 
+                             new Point(width / 2, height / 2 + lineLength / 2), color, thickness);
+
+
+                // Imgproc.cvtColor(inputMat, grayMat, Imgproc.COLOR_BGR2GRAY);
+                outputStream.putFrame(inputMat);
+
+              }
+            }).start();
   }
 
   /**
@@ -85,6 +105,8 @@ public Robot() {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     
+    SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+    SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

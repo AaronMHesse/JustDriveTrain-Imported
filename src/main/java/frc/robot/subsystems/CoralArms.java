@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.text.DecimalFormat;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -17,8 +15,6 @@ public class CoralArms extends SubsystemBase {
     private TalonFX m_motor = new TalonFX(10);
     private TalonFXConfiguration m_config = new TalonFXConfiguration();
     private final MotionMagicVoltage m_position = new MotionMagicVoltage(0).withSlot(0);
-    private DecimalFormat df = new DecimalFormat("#.##");
-
 
 public CoralArms() {
 
@@ -48,14 +44,17 @@ public CoralArms() {
     m_config.Feedback.RotorToSensorRatio = 80;
 
     m_motor.getConfigurator().apply(m_config);
-
-    m_motor.stopMotor();
+    // m_encoder.setPosition(0);
 }
 
     @Override
     public void periodic() {
         double ArmPosition = m_motor.getPosition().getValueAsDouble() * 360;
-        SmartDashboard.putString("CoralPos.", df.format(ArmPosition));
+        SmartDashboard.putNumber("CoralPos.", Math.round(ArmPosition * 100) / 100);
+        SmartDashboard.putNumber("Coral Kraken Temp", m_motor.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Coral Kraken Current", Math.round(m_motor.getRotorVelocity().getValueAsDouble() * 10) / 10);
+        SmartDashboard.putNumber("Coral Kraken ID", m_motor.getDeviceID());
+        SmartDashboard.putNumber("Coral Kraken Velocity", Math.round(m_motor.getVelocity().getValueAsDouble() * 10) / 10);
     }
 
     //Positioning

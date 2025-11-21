@@ -1,15 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.AlgaeArms;
 
-public class AlgaeArmHome extends InstantCommand {
-
-  public AlgaeArmHome(AlgaeArms algaeArm) {
-    algaeArm.v_setpoint(0);
+public class AlgaeArmHome extends SequentialCommandGroup {
+  public AlgaeArmHome(AlgaeArms m_arm) {
+    addCommands(
+      new InstantCommand(() -> m_arm.v_setpoint(32))
+    );
   }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
 }
